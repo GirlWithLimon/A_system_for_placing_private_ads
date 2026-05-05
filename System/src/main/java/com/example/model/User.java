@@ -1,4 +1,58 @@
 package com.example.model;
 
-public class User {
+import jakarta.persistence.*;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+@Entity
+@Table(name = "user")
+public class User implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id", nullable = false)
+    private Profile profile;
+
+    @Column(name="login",nullable = false)
+    private String login;
+
+    @Column(name="password",nullable = false)
+    private String password;
+
+    @Column(name="status",nullable = false)
+    private UserRole role;
+
+    public User() {}
+
+    public User(String login, String password, Profile profile) {
+        this.login = login;
+        this.password = password;
+        this.role = UserRole.User;
+        this.profile = profile;
+    }
+
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+
+    public String getLogin() { return login; }
+    public void setLogin(String login) { this.login = login; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+
+    public String getRole() { return role.getDisplayRole(); }
+    public void setRole(String role) {
+        if(Objects.equals(role, "Пользователь")) {
+            this.role = UserRole.User;
+        } else{
+            this.role = UserRole.Admin;
+        }
+    }
+
+    public Profile getProfile() { return profile; }
+    public void setProfile(Profile profile) { this.profile = profile; }
+
 }
