@@ -13,7 +13,7 @@ public class User implements Serializable {
     private int id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "idprofile", nullable = false)
     private Profile profile;
 
     @Column(name="login",nullable = false)
@@ -27,10 +27,10 @@ public class User implements Serializable {
 
     public User() {}
 
-    public User(String login, String password, Profile profile) {
+    public User(String login, String password, Profile profile, UserRole role) {
         this.login = login;
         this.password = password;
-        this.role = UserRole.User;
+        this.role = role;
         this.profile = profile;
     }
 
@@ -44,13 +44,7 @@ public class User implements Serializable {
     public void setPassword(String password) { this.password = password; }
 
     public String getRole() { return role.getDisplayRole(); }
-    public void setRole(String role) {
-        if(Objects.equals(role, "Пользователь")) {
-            this.role = UserRole.User;
-        } else{
-            this.role = UserRole.Admin;
-        }
-    }
+    public void setRole(UserRole role) {this.role = role; }
 
     public Profile getProfile() { return profile; }
     public void setProfile(Profile profile) { this.profile = profile; }

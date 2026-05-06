@@ -55,4 +55,6 @@ public class Profile implements Serializable {
     public int getNumber() { return number; }
     public void setNumber(int number) { this.number = number; }
 
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 }

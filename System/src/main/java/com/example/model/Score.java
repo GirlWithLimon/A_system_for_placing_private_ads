@@ -5,21 +5,23 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "score")
 public class Score implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "idseller", nullable = false)
     private User seller;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "idbuyer", nullable = false)
     private User buyer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "idadvertisement", nullable = false)
     private Advertisement advertisement;
 
     @Column(name = "score", nullable = false)
@@ -31,4 +33,35 @@ public class Score implements Serializable {
     @Column(name="date")
     private LocalDate date;
 
+    Score(){}
+    Score(int id,User seller, User buyer, Advertisement advertisement, int score, String comment){
+        this.id = id;
+        this.seller = seller;
+        this.buyer = buyer;
+        this.advertisement = advertisement;
+        this.comment = comment;
+        this.score = score;
+        this.date = LocalDate.now();
+    }
+
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public User getSeller() { return seller; }
+    public void setSeller(User seller) { this.seller = seller; }
+
+    public User getBuyer() { return buyer; }
+    public void setBuyer(User buyer) { this.buyer = buyer; }
+
+    public Advertisement getAdvertisement() { return advertisement; }
+    public void setAdvertisement(Advertisement advertisement) { this.advertisement = advertisement; }
+
+    public String getComment() { return comment; }
+    public void setComment(String comment) { this.comment = comment; }
+
+    public int getScore() { return score; }
+    public void setScore(int score) { this.score = score; }
+
+    public LocalDate getDate() { return date; }
+    public void setDate(LocalDate date) { this.date = date; }
 }
