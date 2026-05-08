@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <include file="changelog/v1/v1.create-enums.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/v1/v2.create-tables.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/v1/v3.initial.xml" relativeToChangelogFile="true"/>
+
+    <include file="changelog/v1/v4.create-users-table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/v1/v5.add-default-users.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

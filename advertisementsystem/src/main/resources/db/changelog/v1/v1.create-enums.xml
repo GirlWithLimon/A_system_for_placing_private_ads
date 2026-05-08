@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="create-enum-types" author="developer">
+        <comment>Create enum types for PostgreSQL</comment>
+        <sql dbms="postgresql" endDelimiter=";">
+            DO $$ BEGIN
+            CREATE TYPE user_role AS ENUM ('USER', 'ADMIN');
+            EXCEPTION
+            WHEN duplicate_object THEN null;
+            END $$;
+
+            DO $$ BEGIN
+            CREATE TYPE advertisement_status AS ENUM ('ACTIVE', 'SALE', 'CANCELLED');
+            EXCEPTION
+            WHEN duplicate_object THEN null;
+            END $$;
+        </sql>
+
+        <rollback>
+            <sql>
+                DROP TYPE IF EXISTS user_role;
+                DROP TYPE IF EXISTS advertisement_status;
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
