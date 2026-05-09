@@ -22,8 +22,12 @@ public class User implements Serializable {
     @Column(name="password",nullable = false)
     private String password;
 
-    @Column(name="status",nullable = false)
+    @Column(name="role",nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled;
 
     public User() {}
 
@@ -32,6 +36,7 @@ public class User implements Serializable {
         this.password = password;
         this.role = role;
         this.profile = profile;
+        this.enabled = true;
     }
 
     public Integer getId() { return id; }
@@ -49,4 +54,6 @@ public class User implements Serializable {
     public Profile getProfile() { return profile; }
     public void setProfile(Profile profile) { this.profile = profile; }
 
+    public boolean isEnabled() { return enabled; }
+    public void setEnabled(boolean enabled) { this.enabled = enabled; }
 }

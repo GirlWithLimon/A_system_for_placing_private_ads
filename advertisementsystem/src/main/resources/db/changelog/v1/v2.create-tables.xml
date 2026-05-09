@@ -20,7 +20,7 @@
             <column name="fathername" type="varchar(50)">
                 <constraints nullable="true"/>
             </column>
-            <column name="adress" type="varchar(250)">
+            <column name="address" type="varchar(250)">
                 <constraints nullable="true"/>
             </column>
             <column name="number" type="int">
@@ -50,9 +50,10 @@
             <column name="password" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="role" type="varchar(50)">
+            <column name="role" type="user_role">
                 <constraints nullable="false"/>
             </column>
+            <column name="enabled" type="boolean" defaultValueBoolean="true"/>
         </createTable>
 
         <rollback>
@@ -71,22 +72,27 @@
                              foreignKeyName="fk_advertisement_seller"
                              references="user(id)"/>
             </column>
-            <column name="name" type="varchar(255)">
+            <column name="title" type="varchar(250)">
                 <constraints nullable="false"/>
             </column>
-            <column name="author" type="varchar(255)">
+            <column name="category" type="product_category">
                 <constraints nullable="false"/>
             </column>
-            <column name="status" type="varchar(50)">
+            <column name="description" type="varchar(350)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="publicationdate" type="date">
                 <constraints nullable="false"/>
             </column>
             <column name="price" type="decimal(10,2)">
                 <constraints nullable="false"/>
             </column>
-            <column name="publicationdate" type="date">
+            <column name="byestatus" type="boolean" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
-            <column name="information" type="varchar(1000)"/>
+            <column name="status" type="advertisement_status">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <rollback>
@@ -94,130 +100,121 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="create-bookcopy-table" author="developer">
-        <comment>Create bookcopy table</comment>
-        <createTable tableName="bookcopy">
+    <changeSet id="create-chat-table" author="developer">
+        <comment>Create chat table</comment>
+        <createTable tableName="chat">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="idbook" type="int">
+            <column name="idseller" type="int">
                 <constraints nullable="false"
-                             foreignKeyName="fk_bookcopy_book"
-                             references="book(id)"/>
+                             foreignKeyName="fk_chat_seller"
+                             references="user(id)"/>
             </column>
-            <column name="arrivaldate" type="date">
+            <column name="idbuyer" type="int">
+                <constraints nullable="false"
+                             foreignKeyName="fk_chat_buyer"
+                             references="user(id)"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="chat"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-comments-table" author="developer">
+        <comment>Create comments table</comment>
+        <createTable tableName="comments">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="idbuyer" type="int">
+                <constraints nullable="false"
+                             foreignKeyName="fk_comments_buyer"
+                             references="user(id)"/>
+            </column>
+            <column name="idadvertisement" type="int">
+                <constraints nullable="false"
+                             foreignKeyName="fk_comments_advertisement"
+                             references="advertisement(id)"/>
+            </column>
+            <column name="comment" type="varchar(350)">
                 <constraints nullable="false"/>
             </column>
-            <column name="sale" type="boolean" defaultValueBoolean="false">
+            <column name="date" type="date">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
         <rollback>
-            <dropTable tableName="bookcopy"/>
+            <dropTable tableName="comments"/>
         </rollback>
     </changeSet>
 
-    <changeSet id="create-orders-table" author="developer">
-        <comment>Create orders table</comment>
-        <createTable tableName="orders">
+    <changeSet id="create-message-table" author="developer">
+        <comment>Create message table</comment>
+        <createTable tableName="message">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="status" type="varchar(50)">
+            <column name="iduser" type="int">
+                <constraints nullable="false"
+                             foreignKeyName="fk_message_user"
+                             references="user(id)"/>
+            </column>
+            <column name="idchat" type="int">
+                <constraints nullable="false"
+                             foreignKeyName="fk_message_chat"
+                             references="chat(id)"/>
+            </column>
+            <column name="message" type="varchar(350)">
                 <constraints nullable="false"/>
             </column>
-            <column name="orderdate" type="date">
-                <constraints nullable="false"/>
-            </column>
-            <column name="customername" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="customercontact" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="totalprice" type="decimal(10,2)" defaultValueNumeric="0">
+            <column name="date" type="date">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
         <rollback>
-            <dropTable tableName="orders"/>
+            <dropTable tableName="message"/>
         </rollback>
     </changeSet>
 
-    <changeSet id="create-orderitem-table" author="developer">
-        <comment>Create orderItem table</comment>
-        <createTable tableName="orderitem">
+    <changeSet id="create-score-table" author="developer">
+        <comment>Create score table</comment>
+        <createTable tableName="score">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="idbook" type="int">
+            <column name="idseller" type="int">
                 <constraints nullable="false"
-                             foreignKeyName="fk_orderitem_book"
-                             references="book(id)"/>
+                             foreignKeyName="fk_score_seller"
+                             references="user(id)"/>
             </column>
-            <column name="idbookcopy" type="int">
-                <constraints foreignKeyName="fk_orderitem_bookcopy"
-                             references="bookcopy(id)"/>
-            </column>
-            <column name="idorders" type="int">
+            <column name="idbuyer" type="int">
                 <constraints nullable="false"
-                             foreignKeyName="fk_orderitem_order"
-                             references="orders(id)"/>
+                             foreignKeyName="fk_score_buyer"
+                             references="user(id)"/>
             </column>
-            <column name="status" type="varchar(50)">
+            <column name="idadvertisement" type="int">
+                <constraints nullable="false"
+                             foreignKeyName="fk_score_advertisement"
+                             references="advertisement(id)"/>
+            </column>
+            <column name="score" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment" type="varchar(350)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="date">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
         <rollback>
-            <dropTable tableName="orderitem"/>
-        </rollback>
-    </changeSet>
-
-    <changeSet id="create-request-table" author="developer">
-        <comment>Create request table</comment>
-        <createTable tableName="request">
-            <column name="id" type="int" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="idorderitem" type="int">
-                <constraints nullable="false"
-                             unique="true"
-                             foreignKeyName="fk_request_orderitem"
-                             references="orderitem(id)"/>
-            </column>
-        </createTable>
-
-        <rollback>
-            <dropTable tableName="request"/>
-        </rollback>
-    </changeSet>
-
-    <changeSet id="create-indexes" author="developer">
-        <comment>Create indexes for better performance</comment>
-        <createIndex indexName="idx_bookcopy_book" tableName="bookcopy">
-            <column name="idbook"/>
-        </createIndex>
-
-        <createIndex indexName="idx_orderitem_book" tableName="orderitem">
-            <column name="idbook"/>
-        </createIndex>
-
-        <createIndex indexName="idx_orderitem_order" tableName="orderitem">
-            <column name="idorders"/>
-        </createIndex>
-
-        <createIndex indexName="idx_request_orderitem" tableName="request">
-            <column name="idorderitem"/>
-        </createIndex>
-
-        <rollback>
-            <dropIndex indexName="idx_bookcopy_book" tableName="bookcopy"/>
-            <dropIndex indexName="idx_orderitem_book" tableName="orderitem"/>
-            <dropIndex indexName="idx_orderitem_order" tableName="orderitem"/>
-            <dropIndex indexName="idx_request_orderitem" tableName="request"/>
+            <dropTable tableName="score"/>
         </rollback>
     </changeSet>
 

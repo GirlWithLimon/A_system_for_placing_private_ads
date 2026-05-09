@@ -5,26 +5,30 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
 
-    <changeSet id="add-default-users" author="developer">
-        <comment>Add default users (user1 and admin)</comment>
+    <changeSet id="insert-users" author="developer">
+        <comment>Insert initial user data</comment>
 
-        <insert tableName="users">
-            <column name="username" value="user1"/>
+        <!-- Пароль: user123 -->
+        <insert tableName="user">
+            <column name="idprofile" value="1"/>
+            <column name="login" value="user1"/>
             <column name="password" value="$2a$10$4Z6HhsogdvqVCDwFEPax4uiyTZ/q6lcEjI6szLjg8tggsrDR/5hc6"/>
-            <column name="role" value="ROLE_USER"/>
+            <column name="role" value="USER"/>
             <column name="enabled" value="true"/>
         </insert>
 
-        <insert tableName="users">
-            <column name="username" value="admin"/>
+        <!-- Пароль: admin123 -->
+        <insert tableName="user">
+            <column name="idprofile" value="2"/>
+            <column name="login" value="admin"/>
             <column name="password" value="$2a$10$l0D9mPjbMz6GH9f18LWluu2SkVidXa.m9diByv6Jv2OkVCHe0eGMe"/>
-            <column name="role" value="ROLE_ADMIN"/>
+            <column name="role" value="ADMIN"/>
             <column name="enabled" value="true"/>
         </insert>
 
         <rollback>
-            <delete tableName="users">
-                <where>username IN ('user1', 'admin')</where>
+            <delete tableName="user">
+                <where>login IN ('user1', 'admin')</where>
             </delete>
         </rollback>
     </changeSet>

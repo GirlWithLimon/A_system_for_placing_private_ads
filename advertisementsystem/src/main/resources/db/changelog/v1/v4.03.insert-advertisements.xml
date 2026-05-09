@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="insert-advertisements" author="developer">
+        <comment>Insert initial advertisement data</comment>
+
+        <insert tableName="advertisement">
+            <column name="idseller" value="1"/>
+            <column name="title" value="Toyota Camry 2020"/>
+            <column name="category" value="CAR"/>
+            <column name="description" value="Отличное состояние, только колеса потерял."/>
+            <column name="publicationdate" value="2024-01-15"/>
+            <column name="price" value="2500000.00"/>
+            <column name="byestatus" value="false"/>
+            <column name="status" value="ACTIVE"/>
+        </insert>
+
+        <insert tableName="advertisement">
+            <column name="idseller" value="2"/>
+            <column name="title" value="Роза красная"/>
+            <column name="category" value="FLOWER"/>
+            <column name="description" value="Роза с большими красными бутонами, 25 см."/>
+            <column name="publicationdate" value="2024-03-10"/>
+            <column name="price" value="2500.00"/>
+            <column name="byestatus" value="false"/>
+            <column name="status" value="ACTIVE"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="advertisement">
+                <where>title IN ('Toyota Camry 2020', 'Роза красная')</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

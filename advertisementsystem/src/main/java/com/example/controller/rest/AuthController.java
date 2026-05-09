@@ -89,9 +89,6 @@ public class AuthController {
         }
     }
 
-    /**
-     * Внутренний класс для запроса логина
-     */
     public static class AuthRequest {
         private String username;
         private String password;

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="create-indexes" author="developer">
+        <comment>Create indexes</comment>
+        <createIndex indexName="idx_advertisement_seller" tableName="advertisement">
+            <column name="idseller"/>
+        </createIndex>
+
+        <createIndex indexName="idx_comments_advertisement" tableName="comments">
+            <column name="idadvertisement"/>
+        </createIndex>
+
+        <createIndex indexName="idx_score_seller" tableName="score">
+            <column name="idseller"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex indexName="idx_advertisement_seller" tableName="advertisement"/>
+            <dropIndex indexName="idx_comments_advertisement" tableName="comments"/>
+            <dropIndex indexName="idx_score_seller" tableName="score"/>
+
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

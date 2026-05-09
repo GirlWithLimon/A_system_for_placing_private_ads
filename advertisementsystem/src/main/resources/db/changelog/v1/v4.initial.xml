@@ -5,9 +5,11 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
 
-    <include file="changelog/v1/v1.create-enums.xml" relativeToChangelogFile="true"/>
-    <include file="changelog/v1/v2.create-tables.xml" relativeToChangelogFile="true"/>
-    <include file="changelog/v1/v3.create-indexes.xml" relativeToChangelogFile="true"/>
-    <include file="changelog/v1/v4.initial.xml" relativeToChangelogFile="true"/>
-
+    <include file="v4.01.insert-profiles.xml"/>
+    <include file="v4.02.insert-users.xml"/>
+    <include file="v4.03.insert-advertisements.xml"/>
+    <include file="v4.04.insert-chats.xml"/>
+    <include file="v4.05.insert-messages.xml"/>
+    <include file="v4.06.insert-comments.xml"/>
+    <include file="v4.07.insert-scores.xml"/>
 </databaseChangeLog>

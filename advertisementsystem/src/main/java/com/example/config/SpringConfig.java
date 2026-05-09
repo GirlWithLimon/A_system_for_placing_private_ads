@@ -17,9 +17,9 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan(basePackages = "org.example.bookstore_app")
+@ComponentScan(basePackages = "com.example")
 @PropertySource({
-        "classpath:bookstore.properties",
+        "classpath:advertisement.properties",
         "classpath:jdbc.properties"
 })
 @EnableTransactionManagement
@@ -32,7 +32,7 @@ public class SpringConfig {
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
         configurer.setLocations(
-                new ClassPathResource("bookstore.properties"),
+                new ClassPathResource("advertisement.properties"),
                 new ClassPathResource("jdbc.properties")
         );
         configurer.setIgnoreUnresolvablePlaceholders(true);
@@ -55,7 +55,7 @@ public class SpringConfig {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("org.example.bookstore_app.model");
+        sessionFactory.setPackagesToScan("com.example.model");
 
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");

@@ -19,6 +19,10 @@ public class Advertisement implements Serializable {
     @Column(name="title",nullable = false)
     private String title;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name="category",nullable = false)
+    private ProductsCategory category;
+
     @Column(name="description")
     private String description;
 
@@ -28,7 +32,7 @@ public class Advertisement implements Serializable {
     @Column(name="price", nullable = false)
     private double price;
 
-    @Column (name = "byeStatus",nullable = false)
+    @Column (name = "byestatus",nullable = false)
     private boolean byeStatus;
 
     @Enumerated(EnumType.STRING)
@@ -36,17 +40,19 @@ public class Advertisement implements Serializable {
     private AdvertisementStatus status;
 
     public Advertisement(){}
-    public Advertisement(int id, String title, double price){
+    public Advertisement(int id, String title, ProductsCategory category, double price){
         this.id = id;
         this.title = title;
+        this.category = category;
         this.publicationDate = LocalDate.now();
         this.price = price;
         this.byeStatus = false;
         this.status = AdvertisementStatus.AСTIVE;
     }
-    public Advertisement(int id, String title, String description, double price){
+    public Advertisement(int id, String title, ProductsCategory category, String description, double price){
         this.id = id;
         this.title = title;
+        this.category = category;
         this.description = description;
         this.publicationDate = LocalDate.now();
         this.price = price;
@@ -59,6 +65,9 @@ public class Advertisement implements Serializable {
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
+
+    public ProductsCategory getCategory() { return category; }
+    public void setCategory(ProductsCategory category) { this.category = category; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }

@@ -12,10 +12,10 @@ public class UserDAO extends HibernateAbstractDao<User, Integer> {
         super(User.class);
     }
 
-    public User findByUsername(String username) {
+    public User findByUsername(String login) {
         Session session = getCurrentSession();
-        Query<User> query = session.createQuery("FROM User WHERE username = :username", User.class);
-        query.setParameter("username", username);
+        Query<User> query = session.createQuery("FROM User WHERE login = :login", User.class);
+        query.setParameter("login", login);
         return query.uniqueResult();
     }
 }

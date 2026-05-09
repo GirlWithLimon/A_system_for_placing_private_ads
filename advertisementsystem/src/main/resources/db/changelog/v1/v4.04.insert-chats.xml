@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="insert-chats" author="developer">
+        <comment>Insert initial chat data</comment>
+
+        <insert tableName="chat">
+            <column name="idseller" value="1"/>
+            <column name="idbuyer" value="2"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="chat">
+                <where>idseller=1 AND idbuyer=2</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

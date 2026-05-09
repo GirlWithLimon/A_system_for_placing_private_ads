@@ -21,7 +21,7 @@ public class Profile implements Serializable {
     @Column(name="fathername")
     private String fatherName;
 
-    @Column(name="adress")
+    @Column(name="address")
     private String adress;
 
     @Column(name="number", nullable = false)

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="insert-profiles" author="developer">
+        <comment>Insert initial profile data</comment>
+
+        <insert tableName="profile">
+            <column name="secondname" value="Иванов"/>
+            <column name="name" value="Иван"/>
+            <column name="fathername" value="Иванович"/>
+            <column name="address" value="ул. Пушкина, д. 10, кв. 5"/>
+            <column name="number" value="89123456789"/>
+        </insert>
+
+        <insert tableName="profile">
+            <column name="secondname" value="Петров"/>
+            <column name="name" value="Петр"/>
+            <column name="fathername" value="Петрович"/>
+            <column name="address" value="ул. Ленина, д. 25, кв. 12"/>
+            <column name="number" value="89234567890"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="profile">
+                <where>id IN (1, 2)</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

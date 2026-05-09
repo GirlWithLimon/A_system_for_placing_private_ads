@@ -39,7 +39,8 @@ public class UserServiceSQL extends GenericServiceImpl<User, Integer, UserDAO>
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getLogin())
                 .password(user.getPassword())
-                .roles(user.getRole().replace("ROLE_", ""))
+                .roles(user.getRole())
+                .disabled(!user.isEnabled())
                 .build();
     }
 
@@ -53,6 +54,7 @@ public class UserServiceSQL extends GenericServiceImpl<User, Integer, UserDAO>
         user.setLogin(username);
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRole(role);
+        user.setEnabled(true);
         save(user);
         return user;
     }

@@ -8,7 +8,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] { SpringConfig.class };
+        return new Class[]{SpringConfig.class, SecurityConfig.class, SLiquibaseConfig.class};
     }
 
     @Override
@@ -24,4 +24,5 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     public static class SecurityWebApplicationInitializer extends AbstractSecurityWebApplicationInitializer {
 
     }
+
 }

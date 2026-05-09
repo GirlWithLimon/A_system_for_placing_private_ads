@@ -30,7 +30,7 @@ public class Score implements Serializable {
     @Column(name="comment",nullable = false)
     private String comment;
 
-    @Column(name="date")
+    @Column(name="date",nullable = false)
     private LocalDate date;
 
     Score(){}

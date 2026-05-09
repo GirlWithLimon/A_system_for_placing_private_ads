@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="insert-scores" author="developer">
+        <comment>Insert initial score data</comment>
+
+        <insert tableName="score">
+            <column name="idseller" value="1"/>
+            <column name="idbuyer" value="2"/>
+            <column name="idadvertisement" value="1"/>
+            <column name="score" value="5"/>
+            <column name="comment" value="Отличный продавец, все рассказал, показал"/>
+            <column name="date" value="2024-03-21"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="score">
+                <where>idadvertisement=1</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

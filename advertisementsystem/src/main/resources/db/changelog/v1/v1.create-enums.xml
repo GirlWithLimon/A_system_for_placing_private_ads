@@ -19,12 +19,19 @@
             EXCEPTION
             WHEN duplicate_object THEN null;
             END $$;
+
+            DO $$ BEGIN
+            CREATE TYPE product_category AS ENUM ('CAR', 'FLOWER');
+            EXCEPTION
+            WHEN duplicate_object THEN null;
+            END $$;
         </sql>
 
         <rollback>
             <sql>
                 DROP TYPE IF EXISTS user_role;
                 DROP TYPE IF EXISTS advertisement_status;
+                DROP TYPE IF EXISTS product_category;
             </sql>
         </rollback>
     </changeSet>
