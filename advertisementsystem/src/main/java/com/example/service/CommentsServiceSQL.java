@@ -2,6 +2,7 @@ package com.example.service;
 
 
 import com.example.dao.CommentsDAO;
+import com.example.dto.CommentsDTO;
 import com.example.model.Comments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,5 +51,9 @@ implements ICommentsService{
     public void delete(Integer id) {
         logger.debug("Удаление комментария с id: {}",id);
         super.delete(id);
+    }
+
+    public List<CommentsDTO> findAdvertisementComments(int idadvertisement){
+        return defaultRepository.findAdvertisementComments(idadvertisement);
     }
 }

@@ -60,6 +60,15 @@ public class Advertisement implements Serializable {
         this.status = AdvertisementStatus.AСTIVE;
     }
 
+    public Advertisement(String title, ProductsCategory category, double price){
+        this.title = title;
+        this.category = category;
+        this.publicationDate = LocalDate.now();
+        this.price = price;
+        this.byeStatus = false;
+        this.status = AdvertisementStatus.AСTIVE;
+    }
+
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 

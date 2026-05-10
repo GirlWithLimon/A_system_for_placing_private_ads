@@ -2,6 +2,8 @@ package com.example.service;
 
 
 import com.example.dao.AdvertisementDAO;
+import com.example.dto.AdvertisementItemDTO;
+import com.example.dto.AdvertisementsDTO;
 import com.example.model.Advertisement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,5 +53,13 @@ implements IAdvertisementService{
     public void delete(Integer id) {
         logger.debug("Удаление объявления с id: {}",id);
         super.delete(id);
+    }
+
+    public List<AdvertisementsDTO> findAdvertisementsWithSellerInfo(){
+       return defaultRepository.findAdvertisementsWithSellerInfo();
+    }
+
+    public AdvertisementItemDTO findAdvertisementItem(int id){
+        return defaultRepository.findAdvertisementItem(id);
     }
 }

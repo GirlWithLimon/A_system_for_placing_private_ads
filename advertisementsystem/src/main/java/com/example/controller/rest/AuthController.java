@@ -60,7 +60,7 @@ public class AuthController {
         try {
              if (registerRequest.getLogin() == null || registerRequest.getLogin().trim().isEmpty() ||
                     registerRequest.getPassword() == null || registerRequest.getPassword().trim().isEmpty()) {
-                return ResponseEntity.badRequest().body(Map.of("error", "Имя пользователя и пароль не могут быть пустыми"));
+                return ResponseEntity.badRequest().body(Map.of("error", "Логин и пароль не могут быть пустыми"));
             }
 
             User newUser = userService.registerNewUser(
