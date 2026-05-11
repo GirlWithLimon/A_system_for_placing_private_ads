@@ -7,6 +7,6 @@ public class AdvertisementNotFoundException extends RuntimeException {
     }
 
     public AdvertisementNotFoundException(int id) {
-        super("Книга с ID " + id + " не найдена");
+        super("Объявление с ID " + id + " не найдено");
     }
 }

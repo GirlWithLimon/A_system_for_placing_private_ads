@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.dao.UserDAO;
+import com.example.model.Profile;
 import com.example.model.User;
 import com.example.model.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,13 +47,11 @@ public class UserServiceSQL extends GenericServiceImpl<User, Integer, UserDAO>
 
     @Override
     @Transactional
-    public User registerNewUser(String username, String rawPassword, UserRole role) {
-        if (findByUsername(username) != null) {
-            throw new IllegalArgumentException("Пользователь с таким именем уже существует");
-        }
+    public User registerNewUser(String username, String rawPassword, Profile profile, UserRole role) {
         User user = new User();
         user.setLogin(username);
         user.setPassword(passwordEncoder.encode(rawPassword));
+        user.setProfile(profile);
         user.setRole(role);
         user.setEnabled(true);
         save(user);

@@ -57,15 +57,19 @@ implements IAdvertisementService{
         super.delete(id);
     }
 
+    @Override
     public List<AdvertisementsDTO> findAdvertisementsWithSellerInfo(){
        return defaultRepository.findAdvertisementsWithSellerInfo();
     }
+    @Override
     public List<AdvertisementsUsersDTO> findAdvertisementsUsers(int idSeller){
         return defaultRepository.findAdvertisementsUsers(idSeller);
     }
+    @Override
     public AdvertisementItemDTO findAdvertisementItem(int id){
         return defaultRepository.findAdvertisementItem(id);
     }
+    @Override
     public AdvertisementUsersDTO findAdvertisementUsersItem(int id){
         return defaultRepository.findAdvertisementUsersItem(id);
     }

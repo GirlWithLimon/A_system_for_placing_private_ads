@@ -1,10 +1,14 @@
 package com.example.controller.rest;
 
+import com.example.dto.AuthDTO;
 import com.example.dto.RegisterUserDTO;
+import com.example.model.Profile;
 import com.example.model.User;
 import com.example.model.UserRole;
 import com.example.security.JwtTokenUtil;
+import com.example.service.IProfileService;
 import com.example.service.IUserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,11 +37,14 @@ public class AuthController {
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private IProfileService profileService;
+
     /**
      * Аутентификация пользователя и получение JWT-токена
      */
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<?> login(@Valid @RequestBody AuthDTO authRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
@@ -56,16 +63,27 @@ public class AuthController {
      * Регистрация нового пользователя
      */
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterUserDTO registerRequest) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDTO registerRequest) {
         try {
-             if (registerRequest.getLogin() == null || registerRequest.getLogin().trim().isEmpty() ||
-                    registerRequest.getPassword() == null || registerRequest.getPassword().trim().isEmpty()) {
-                return ResponseEntity.badRequest().body(Map.of("error", "Логин и пароль не могут быть пустыми"));
+            if (userService.findByUsername(registerRequest.getLogin()) != null) {
+                throw new IllegalArgumentException("Пользователь с таким именем уже существует");
+            }
+            Profile profile = new Profile(
+                    registerRequest.getSecondName(),
+                    registerRequest.getName(),
+                    registerRequest.getNumber()
+            );
+            if (registerRequest.getAddress()!=null){
+                profile.setAddress(registerRequest.getAddress());
+            }
+            if (registerRequest.getFatherName()!=null){
+                profile.setFatherName(registerRequest.getFatherName());
             }
 
             User newUser = userService.registerNewUser(
                     registerRequest.getLogin().trim(),
                     registerRequest.getPassword(),
+                    profile,
                     UserRole.USER
             );
 
@@ -89,13 +107,5 @@ public class AuthController {
         }
     }
 
-    public static class AuthRequest {
-        private String username;
-        private String password;
 
-        public String getUsername() { return username; }
-        public void setUsername(String username) { this.username = username; }
-        public String getPassword() { return password; }
-        public void setPassword(String password) { this.password = password; }
-    }
 }

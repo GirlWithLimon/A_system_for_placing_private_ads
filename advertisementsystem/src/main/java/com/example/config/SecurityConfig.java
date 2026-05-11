@@ -55,10 +55,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/advertisements/**").hasRole("ADMIN")
 
                         .requestMatchers(HttpMethod.GET, "/api/user/advertisements/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/user/advertisements/{id}/byestatus/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/user/advertisements/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/user/advertisements/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/user/advertisements/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/user/advertisements/{id}/byestatus/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/user/advertisements/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.PATCH, "/api/user/advertisements/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/user/advertisements/**").hasRole("USER")
 
 
                         .anyRequest().authenticated()

@@ -29,8 +29,8 @@ public class Profile implements Serializable {
     @OneToOne (mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private User user;
 
-    Profile(){}
-    Profile(String secondName, String name, int number){
+    public Profile(){}
+    public Profile(String secondName, String name, int number){
         this.secondName = secondName;
         this.name = name;
         this.number=number;

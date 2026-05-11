@@ -53,6 +53,7 @@ implements ICommentsService{
         super.delete(id);
     }
 
+    @Override
     public List<CommentsDTO> findAdvertisementComments(int idadvertisement){
         return defaultRepository.findAdvertisementComments(idadvertisement);
     }

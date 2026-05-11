@@ -25,8 +25,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AdvertisementNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleAdvertisementNotFoundException(
             AdvertisementNotFoundException ex, HttpServletRequest request) {
-
-        logger.error("Advertisement not found: {}", ex.getMessage());
+        logger.error("Объявление не найдено: {}", ex.getMessage());
 
         ErrorResponseDTO errorResponse = new ErrorResponseDTO(
                 HttpStatus.NOT_FOUND.value(),
@@ -39,30 +38,34 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponseDTO> handleValidationExceptions(
+            MethodArgumentNotValidException ex, HttpServletRequest request) {
 
-        Map<String, String> errors = new HashMap<>();
+        Map<String, String> fieldErrors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
+            fieldErrors.put(fieldName, errorMessage);
         });
+        logger.error("Ошибка при валидации: {}", fieldErrors);
 
-        logger.error("Validation error: {}", errors);
+        ErrorResponseDTO errorResponse = new ErrorResponseDTO(
+                HttpStatus.BAD_REQUEST.value(),
+                "Валидация не прошла: " + fieldErrors.toString(),
+                request.getRequestURI()
+        );
 
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponseDTO> handleConstraintViolationException(
             ConstraintViolationException ex, HttpServletRequest request) {
-
-        logger.error("Constraint violation: {}", ex.getMessage());
+        logger.error("Нарушение ограничения: {}", ex.getMessage());
 
         ErrorResponseDTO errorResponse = new ErrorResponseDTO(
                 HttpStatus.BAD_REQUEST.value(),
-                "Validation error: " + ex.getMessage(),
+                "Ошибка валидации: " + ex.getMessage(),
                 request.getRequestURI()
         );
 
@@ -72,12 +75,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponseDTO> handleHttpMessageNotReadableException(
             HttpMessageNotReadableException ex, HttpServletRequest request) {
-
-        logger.error("Invalid JSON format: {}", ex.getMessage());
+        logger.error("Неверный JSON формат: {}", ex.getMessage());
 
         ErrorResponseDTO errorResponse = new ErrorResponseDTO(
                 HttpStatus.BAD_REQUEST.value(),
-                "Invalid request format. Please check JSON syntax.",
+                "Неверный фоормат запроса. Проверте JSON синтаксис.",
                 request.getRequestURI()
         );
 
@@ -87,12 +89,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponseDTO> handleMethodArgumentTypeMismatchException(
             MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
-
-        logger.error("Invalid argument type: {}", ex.getMessage());
+        logger.error("Неверный тип аргумента: {}", ex.getMessage());
 
         ErrorResponseDTO errorResponse = new ErrorResponseDTO(
                 HttpStatus.BAD_REQUEST.value(),
-                "Invalid argument: " + ex.getName() + " should be of type " +
+                "Неверный аргумент: " + ex.getName() + " должен быть типа  " +
                         (ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "unknown"),
                 request.getRequestURI()
         );
@@ -103,15 +104,41 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO> handleGenericException(
             Exception ex, HttpServletRequest request) {
-
-        logger.error("Internal server error: {}", ex.getMessage(), ex);
+        logger.error("Ошибка сервера: {}", ex.getMessage(), ex);
 
         ErrorResponseDTO errorResponse = new ErrorResponseDTO(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Internal server error. Please try again later.",
+                "Ошибка сервера. Пожалуйста попробуйте позже.",
                 request.getRequestURI()
         );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponseDTO> handleIllegalArgumentException(
+            IllegalArgumentException ex, HttpServletRequest request) {
+        logger.warn("Неверный аргумент: {}", ex.getMessage());
+
+        ErrorResponseDTO errorResponse = new ErrorResponseDTO(
+                HttpStatus.CONFLICT.value(),
+                "Ошибка: " + ex.getMessage(),
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleAccessDeniedException(
+            org.springframework.security.access.AccessDeniedException ex,
+            HttpServletRequest request) {
+        logger.warn("Доступ запрещён: {}", ex.getMessage());
+
+        ErrorResponseDTO errorResponse = new ErrorResponseDTO(
+                HttpStatus.FORBIDDEN.value(),
+                "Доступ запрещён. У вас недостаточно прав для выполнения этой операции.",
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 }

@@ -4,9 +4,7 @@ import com.example.dto.*;
 import com.example.exception.AdvertisementNotFoundException;
 import com.example.model.Advertisement;
 import com.example.model.User;
-import com.example.service.AdvertisementServiceSQL;
-import com.example.service.CommentsServiceSQL;
-import com.example.service.UserServiceSQL;
+import com.example.service.*;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,20 +20,20 @@ import java.util.Map;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/user/advertisements")
+@RequestMapping("/api/my/advertisements")
 public class AdvertisementUsersController {
     private static final Logger logger = LoggerFactory.getLogger(AdvertisementUsersController.class);
 
     @Autowired
-    private AdvertisementServiceSQL advertisementServiceSQL;
+    private IAdvertisementService advertisementServiceSQL;
     @Autowired
-    private CommentsServiceSQL commentsServiceSQL;
+    private ICommentsService commentsServiceSQL;
     @Autowired
-    private UserServiceSQL userServiceSQL;
+    private IUserService userServiceSQL;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAdvertisements(Authentication authentication) {
-        logger.info("GET /api/user/advertisements - запрос на получение объявлений пользователя");
+        logger.info("GET /api/my/advertisements - запрос на получение объявлений пользователя");
         User seller = findUser(authentication);
         if (seller == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -47,7 +45,7 @@ public class AdvertisementUsersController {
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAdvertisementItem(@PathVariable("id") int id) {
-        logger.info("GET /api/user/advertisements/{id} - запрос на получение объявления пользователя");
+        logger.info("GET /api/my/advertisements/{id} - запрос на получение объявления пользователя");
         AdvertisementUsersDTO advertisement = advertisementServiceSQL.findAdvertisementUsersItem(id);
         if (advertisement == null) {
             throw new AdvertisementNotFoundException("Объявление с ID " + id + " не найдено");
@@ -59,7 +57,7 @@ public class AdvertisementUsersController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createAdvertisement(Authentication authentication, @Valid @RequestBody NewAdvertisementDTO advertisementDTO) {
-        logger.info("POST /api/user/advertisements - создание объявления: {}", advertisementDTO.getTitle());
+        logger.info("POST /api/my/advertisements - создание объявления: {}", advertisementDTO.getTitle());
         User seller = findUser(authentication);
         if (seller == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -81,23 +79,24 @@ public class AdvertisementUsersController {
 
         return new ResponseEntity<>(advertisement, HttpStatus.CREATED);
     }
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
+    @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeAdvertisement(Authentication authentication, @PathVariable("id") int id, @Valid @RequestBody ChangeAdvertisementDTO advertisementDTO) {
-        logger.info("PUT /api/user/advertisements/id - изменение объявления с id: {}", id);
+        logger.info("Patch /api/my/advertisements/id - изменение объявления с id: {}", id);
         User seller = findUser(authentication);
         if (seller == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "Пользователь не найден"));
         }
-        if (!Objects.equals(advertisementServiceSQL.find(id).getSeller().getId(), seller.getId())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Map.of("error", "Вы можете редактировать только свои объявления"));
-        }
         Advertisement advertisement = advertisementServiceSQL.find(id);
         if (advertisement == null) {
             throw new AdvertisementNotFoundException("Объявление с ID " + id + " не найдено");
         }
+        if (!Objects.equals(advertisementServiceSQL.find(id).getSeller().getId(), seller.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Вы можете редактировать только свои объявления"));
+        }
+
         advertisement.setTitle(advertisementDTO.getTitle());
         advertisement.setPrice(advertisementDTO.getPrice());
         advertisement.setCategory(advertisementDTO.getCategory());
@@ -112,10 +111,10 @@ public class AdvertisementUsersController {
     }
 
     //для проплачивания
-    @PutMapping(value = "/{id}/byestatus", consumes = MediaType.APPLICATION_JSON_VALUE,
+    @PatchMapping(value = "/{id}/byestatus", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeAdvertisementSaleStatus(@PathVariable("id") int id, @Valid @RequestBody AdvertisementByeDTO advertisementDTO) {
-        logger.info("PUT /api/user/advertisements/id - изменение статуса проплаченности объявления с id: {}", id);
+        logger.info("PATCH /api/my/advertisements/id - изменение статуса проплаченности объявления с id: {}", id);
         Advertisement advertisement = advertisementServiceSQL.find(id);
         if (advertisement == null) {
             throw new AdvertisementNotFoundException("Объявление с ID " + id + " не найдено");
