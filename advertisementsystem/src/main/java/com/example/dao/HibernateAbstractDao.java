@@ -35,8 +35,10 @@ public abstract class HibernateAbstractDao<T, PK extends Serializable>
 
     @Override
     public void delete(PK id) {
-        T entity = getCurrentSession().load(type, id);
-        getCurrentSession().delete(entity);
+        T entity = getCurrentSession().get(type, id);
+        if (entity != null) {
+            getCurrentSession().delete(entity);
+        }
     }
 
     @Override

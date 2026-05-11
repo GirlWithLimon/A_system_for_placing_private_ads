@@ -1,7 +1,9 @@
 package com.example.dao;
 
 import com.example.dto.AdvertisementItemDTO;
+import com.example.dto.AdvertisementUsersDTO;
 import com.example.dto.AdvertisementsDTO;
+import com.example.dto.AdvertisementsUsersDTO;
 import com.example.model.Advertisement;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -21,7 +23,7 @@ public class AdvertisementDAO extends HibernateAbstractDao<Advertisement, Intege
     }
 
     public List<AdvertisementsDTO> findAdvertisementsWithSellerInfo() {
-        logger.debug("Поиск всех объявлений с информацией о продавце (сначала проплаченные, потом нет)");
+        logger.debug("Поиск всех объявлений с информацией о продавце (сначала проплаченные, потом нет, сортировка по рейтингу продавца и дате)");
         Session session = getCurrentSession();
 
         String hql = """
@@ -38,6 +40,10 @@ public class AdvertisementDAO extends HibernateAbstractDao<Advertisement, Intege
         FROM Advertisement a
         JOIN a.seller u
         WHERE a.byeStatus = true
+        AND a.status = 'ACTIVE'
+        ORDER BY
+             COALESCE((SELECT AVG(s.score) FROM Score s WHERE s.seller = u), 0.0) DESC,
+             a.publicationDate DESC
         UNION ALL
         SELECT new AdvertisementsDTO(
             a.title,
@@ -53,6 +59,9 @@ public class AdvertisementDAO extends HibernateAbstractDao<Advertisement, Intege
         JOIN a.seller u
         WHERE a.byeStatus = false
         AND a.status = 'ACTIVE'
+        ORDER BY
+             COALESCE((SELECT AVG(s.score) FROM Score s WHERE s.seller = u), 0.0) DESC,
+             a.publicationDate DESC
     """;
 
         Query<AdvertisementsDTO> query = session.createQuery(hql, AdvertisementsDTO.class);
@@ -83,5 +92,47 @@ public class AdvertisementDAO extends HibernateAbstractDao<Advertisement, Intege
         Query<AdvertisementItemDTO> query = session.createQuery(hql, AdvertisementItemDTO.class);
         query.setParameter("id", id);
         return query.getSingleResult();
+    }
+
+    public AdvertisementUsersDTO findAdvertisementUsersItem(int id) {
+        logger.debug("Показ объявления с id {} для продавца", id);
+        Session session = getCurrentSession();
+
+        String hql = """
+        SELECT new com.example.dto.AdvertisementUsersDTO(
+            a.title,
+            a.category,
+            a.description,
+            a.price,
+            a.byestatus
+        )
+        FROM Advertisement a
+        WHERE a.id = :id
+    """;
+
+        Query<AdvertisementUsersDTO> query = session.createQuery(hql, AdvertisementUsersDTO.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
+    }
+
+
+    public List<AdvertisementsUsersDTO> findAdvertisementsUsers(int idSeller) {
+        logger.debug("Показ объявлений продавца с id {}", idSeller);
+        Session session = getCurrentSession();
+
+        String hql = """
+        SELECT new com.example.dto.AdvertisementsUsersDTO(
+            a.title,
+            a.category,
+            a.description,
+            a.price
+        )
+        FROM Advertisement a
+        WHERE a.idseller = :idseller
+    """;
+
+        Query<AdvertisementsUsersDTO> query = session.createQuery(hql, AdvertisementsUsersDTO.class);
+        query.setParameter("idseller", idSeller);
+        return query.getResultList();
     }
 }

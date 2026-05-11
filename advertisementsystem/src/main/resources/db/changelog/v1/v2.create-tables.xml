@@ -47,7 +47,7 @@
             <column name="login" type="varchar(150)">
                 <constraints nullable="false"/>
             </column>
-            <column name="password" type="varchar(50)">
+            <column name="password" type="varchar(260)">
                 <constraints nullable="false"/>
             </column>
             <column name="role" type="user_role">

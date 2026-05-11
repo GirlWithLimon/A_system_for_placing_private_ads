@@ -3,7 +3,9 @@ package com.example.controller.rest;
 import com.example.dto.AdvertisementItemDTO;
 import com.example.dto.AdvertisementsDTO;
 import com.example.dto.NewAdvertisementDTO;
+import com.example.exception.AdvertisementNotFoundException;
 import com.example.model.Advertisement;
+import com.example.model.User;
 import com.example.service.AdvertisementServiceSQL;
 import com.example.service.CommentsServiceSQL;
 import jakarta.validation.Valid;
@@ -13,10 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,32 +40,29 @@ public class AdvertisementController {
         List<AdvertisementsDTO> advertisements = advertisementServiceSQL.findAdvertisementsWithSellerInfo();
         return ResponseEntity.ok(advertisements);
     }
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Advertisement> createAdvertisement(@Valid @RequestBody NewAdvertisementDTO advertisementDTO) {
-        logger.info("POST /api/advertisement - создание объявления: {}", advertisementDTO.getTitle());
 
-        Advertisement advertisement = new Advertisement(
-                advertisementDTO.getTitle(),
-                advertisementDTO.getCategory(),
-                advertisementDTO.getPrice()
-        );
-
-        if (advertisementDTO.getDescription() != null) {
-            advertisement.setDescription(advertisementDTO.getDescription());
-        }
-
-        advertisementServiceSQL.save(advertisement);
-        logger.info("Книга создана с ID: {}", advertisement.getId());
-
-        return new ResponseEntity<>(advertisement, HttpStatus.CREATED);
-    }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AdvertisementItemDTO> getAdvertisementItem(@PathVariable("id") int id) {
         logger.info("GET /api/advertisements/{id} - запрос на получение объявления");
         AdvertisementItemDTO advertisement = advertisementServiceSQL.findAdvertisementItem(id);
+        if (advertisement == null) {
+            throw new AdvertisementNotFoundException("Объявление с ID " + id + " не найдено");
+        }
         advertisement.setComments(commentsServiceSQL.findAdvertisementComments(id));
         return ResponseEntity.ok(advertisement);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> deleteAdvertisement(Authentication authentication, @PathVariable("id") int id) {
+        logger.info("DELETE /api/advertisements/id - удаление объявления с id: {}", id);
+        Advertisement advertisement = advertisementServiceSQL.find(id);
+        if (advertisement == null) {
+            throw new AdvertisementNotFoundException("Объявление с ID " + id + " не найдено");
+        }
+        advertisementServiceSQL.delete(id);
+        logger.info("Объявление удалено с ID: {}", id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

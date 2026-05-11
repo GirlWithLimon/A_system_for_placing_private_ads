@@ -51,23 +51,15 @@ public class SecurityConfig {
                         .requestMatchers("/api/register").permitAll()
                         .requestMatchers("/error").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/api/books/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/books/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/books/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/books/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/advertisements/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/advertisements/**").hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/api/orders/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/orders/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/orders/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/user/advertisements/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/user/advertisements/{id}/byestatus/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/user/advertisements/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/user/advertisements/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/user/advertisements/**").hasAnyRole("USER", "ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/api/books/sort/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/books/sort/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/books/sort/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/books/sort/**").hasRole("ADMIN")
-
-                        .requestMatchers(HttpMethod.GET, "/api/orders/sort/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/orders/sort/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/orders/sort/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )

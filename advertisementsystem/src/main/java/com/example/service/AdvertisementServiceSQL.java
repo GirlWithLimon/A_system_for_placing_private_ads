@@ -3,7 +3,9 @@ package com.example.service;
 
 import com.example.dao.AdvertisementDAO;
 import com.example.dto.AdvertisementItemDTO;
+import com.example.dto.AdvertisementUsersDTO;
 import com.example.dto.AdvertisementsDTO;
+import com.example.dto.AdvertisementsUsersDTO;
 import com.example.model.Advertisement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,8 +60,13 @@ implements IAdvertisementService{
     public List<AdvertisementsDTO> findAdvertisementsWithSellerInfo(){
        return defaultRepository.findAdvertisementsWithSellerInfo();
     }
-
+    public List<AdvertisementsUsersDTO> findAdvertisementsUsers(int idSeller){
+        return defaultRepository.findAdvertisementsUsers(idSeller);
+    }
     public AdvertisementItemDTO findAdvertisementItem(int id){
         return defaultRepository.findAdvertisementItem(id);
+    }
+    public AdvertisementUsersDTO findAdvertisementUsersItem(int id){
+        return defaultRepository.findAdvertisementUsersItem(id);
     }
 }

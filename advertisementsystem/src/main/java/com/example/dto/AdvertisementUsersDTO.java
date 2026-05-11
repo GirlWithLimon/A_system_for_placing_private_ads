@@ -1,34 +1,32 @@
 package com.example.dto;
 
+import com.example.model.User;
+
 import java.util.List;
 
-public class AdvertisementItemDTO {
-   private String title;
-   private String description;
-   private String category;
-   private Double price;
-   private String seller;
-   private Double score;
-   private List<CommentsDTO> comments;
+public class AdvertisementUsersDTO {
+    private String title;
+    private String category;
+    private String description;
+    private Double price;
+    private boolean byestatus;
+    private List<CommentsDTO> comments;
 
 
-    AdvertisementItemDTO(){}
+    AdvertisementUsersDTO(){}
 
-    public AdvertisementItemDTO(String title, String description, String category, Double price, String seller, Double score) {
+    public AdvertisementUsersDTO(String title, String category, String description, Double price, Boolean byestatus) {
         this.title = title;
         this.description = description;
         this.category = category;
         this.price = price;
-        this.seller = seller;
-        this.score = score;
+        this.byestatus = byestatus;
     }
 
-    public AdvertisementItemDTO(String title, String category, Double price, String seller, Double score) {
+    public AdvertisementUsersDTO(String title, String category, Double price) {
         this.title = title;
         this.category = category;
         this.price = price;
-        this.seller = seller;
-        this.score = score;
     }
 
     public String getTitle() { return title; }
@@ -43,11 +41,8 @@ public class AdvertisementItemDTO {
     public Double getPrice() { return price; }
     public void setPrice(Double price) { this.price = price; }
 
-    public String getSeller() { return seller; }
-    public void setSeller(String seller) { this.seller = seller; }
-
-    public Double getScore() { return score; }
-    public void setScore(Double score) { this.score = score; }
+    public boolean getByeStatus() { return byestatus; }
+    public void setByestatus(boolean byestatus) { this.byestatus = byestatus; }
 
     public List<CommentsDTO> getComments() { return comments; }
     public void setComments(List<CommentsDTO> comments) { this.comments = comments; }

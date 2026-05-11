@@ -60,7 +60,8 @@ public class Advertisement implements Serializable {
         this.status = AdvertisementStatus.AСTIVE;
     }
 
-    public Advertisement(String title, ProductsCategory category, double price){
+    public Advertisement(User seller, String title, ProductsCategory category, double price){
+        this.seller = seller;
         this.title = title;
         this.category = category;
         this.publicationDate = LocalDate.now();
@@ -71,6 +72,9 @@ public class Advertisement implements Serializable {
 
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
+
+    public User getSeller() { return seller; }
+    public void setSeller(User seller) { this.seller = seller; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }

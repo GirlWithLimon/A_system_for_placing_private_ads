@@ -19,8 +19,9 @@ import java.util.Properties;
 @Configuration
 @ComponentScan(basePackages = "com.example")
 @PropertySource({
-        "classpath:advertisement.properties",
-        "classpath:jdbc.properties"
+        "classpath:advertisementsystem.properties",
+        "classpath:jdbc.properties",
+
 })
 @EnableTransactionManagement
 public class SpringConfig {

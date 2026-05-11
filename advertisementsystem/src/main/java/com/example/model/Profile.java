@@ -3,7 +3,6 @@ package com.example.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(name = "profile")
@@ -22,7 +21,7 @@ public class Profile implements Serializable {
     private String fatherName;
 
     @Column(name="address")
-    private String adress;
+    private String address;
 
     @Column(name="number", nullable = false)
     private Integer number;
@@ -49,8 +48,8 @@ public class Profile implements Serializable {
     public String getFatherName() { return fatherName; }
     public void setFatherName(String fatherName) { this.fatherName = fatherName; }
 
-    public String getAdress() { return adress; }
-    public void setAdress(String adress) { this.adress = adress; }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
 
     public int getNumber() { return number; }
     public void setNumber(int number) { this.number = number; }

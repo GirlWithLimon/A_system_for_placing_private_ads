@@ -22,7 +22,7 @@ public class RootController {
 
         Map<String, String> endpoints = new HashMap<>();
         endpoints.put("profile", "/api/profile");
-        endpoints.put("advertisement", "/api/advertisement");
+        endpoints.put("advertisement", "/api/advertisements");
         response.put("endpoints", endpoints);
 
         return ResponseEntity.ok(response);

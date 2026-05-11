@@ -21,6 +21,7 @@ public class CommentsDAO extends HibernateAbstractDao<Comments, Integer> {
         logger.debug("CommentsDAO created");
     }
 
+
     public List<CommentsDTO> findAdvertisementComments(int idadvertisement) {
         logger.debug("Показ объявления с idadvertisement {}", idadvertisement);
         Session session = getCurrentSession();
@@ -32,7 +33,7 @@ public class CommentsDAO extends HibernateAbstractDao<Comments, Integer> {
         """;
 
         Query<CommentsDTO> query = session.createQuery(hql, CommentsDTO.class);
-        query.setParameter("id", idadvertisement);
+        query.setParameter("idadvertisement", idadvertisement);
         return query.getResultList();
     }
 }
