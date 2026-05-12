@@ -4,6 +4,7 @@ import com.example.dto.AdvertisementItemDTO;
 import com.example.dto.AdvertisementsDTO;
 import com.example.exception.AdvertisementNotFoundException;
 import com.example.model.Advertisement;
+import com.example.model.ProductsCategory;
 import com.example.service.IAdvertisementService;
 import com.example.service.ICommentsService;
 import org.slf4j.Logger;
@@ -43,6 +44,15 @@ public class AdvertisementController {
             throw new AdvertisementNotFoundException("Объявление с ID " + id + " не найдено");
         }
         advertisement.setComments(commentsServiceSQL.findAdvertisementComments(id));
+        return ResponseEntity.ok(advertisement);
+    }
+    @GetMapping(value = "/{category}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<AdvertisementsDTO>> getAdvertisementWithCategory(@PathVariable("category")ProductsCategory productsCategory) {
+        logger.info("GET /api/advertisements/{category} - запрос на получение объявления по категориям");
+        List<AdvertisementsDTO>  advertisement = advertisementServiceSQL.findAdvertisementWithCategory(productsCategory);
+        if (advertisement == null) {
+            throw new AdvertisementNotFoundException("Объявление с категорией " + productsCategory + " не найдено");
+        }
         return ResponseEntity.ok(advertisement);
     }
 

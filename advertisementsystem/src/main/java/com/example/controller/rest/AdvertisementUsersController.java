@@ -2,6 +2,7 @@ package com.example.controller.rest;
 
 import com.example.dto.*;
 import com.example.exception.AdvertisementNotFoundException;
+import com.example.exception.UserNotFoundException;
 import com.example.model.Advertisement;
 import com.example.model.User;
 import com.example.service.*;
@@ -36,8 +37,7 @@ public class AdvertisementUsersController {
         logger.info("GET /api/my/advertisements - запрос на получение объявлений пользователя");
         User seller = findUser(authentication);
         if (seller == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", "Пользователь не найден"));
+            throw new UserNotFoundException("Пользователь не найден");
         }
         List<AdvertisementsUsersDTO> advertisements = advertisementServiceSQL.findAdvertisementsUsers(seller.getId());
         return ResponseEntity.ok(advertisements);
@@ -60,8 +60,7 @@ public class AdvertisementUsersController {
         logger.info("POST /api/my/advertisements - создание объявления: {}", advertisementDTO.getTitle());
         User seller = findUser(authentication);
         if (seller == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", "Пользователь не найден"));
+            throw new UserNotFoundException("Пользователь с не найден");
         }
         Advertisement advertisement = new Advertisement(
                 seller,
@@ -85,8 +84,7 @@ public class AdvertisementUsersController {
         logger.info("Patch /api/my/advertisements/id - изменение объявления с id: {}", id);
         User seller = findUser(authentication);
         if (seller == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", "Пользователь не найден"));
+            throw new UserNotFoundException("Пользователь с ID " + id + " не найден");
         }
         Advertisement advertisement = advertisementServiceSQL.find(id);
         if (advertisement == null) {
@@ -131,8 +129,7 @@ public class AdvertisementUsersController {
         logger.info("DELETE /api/user/advertisements/id - удаление объявления с id: {}", id);
         User seller = findUser(authentication);
         if (seller == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", "Пользователь не найден"));
+            throw new UserNotFoundException("Пользователь с ID " + id + " не найден");
         }
         if (!Objects.equals(advertisementServiceSQL.find(id).getSeller().getId(), seller.getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)

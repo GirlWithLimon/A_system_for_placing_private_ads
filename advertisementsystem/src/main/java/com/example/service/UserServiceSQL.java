@@ -1,6 +1,8 @@
 package com.example.service;
 
 import com.example.dao.UserDAO;
+import com.example.dto.UserProfileScoreDTO;
+import com.example.dto.UserScoreDTO;
 import com.example.model.Profile;
 import com.example.model.User;
 import com.example.model.UserRole;
@@ -11,6 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class UserServiceSQL extends GenericServiceImpl<User, Integer, UserDAO>
@@ -56,5 +60,13 @@ public class UserServiceSQL extends GenericServiceImpl<User, Integer, UserDAO>
         user.setEnabled(true);
         save(user);
         return user;
+    }
+    @Override
+    public List<UserScoreDTO> findUsersWithScore(){
+        return defaultRepository.findUsersWithScore();
+    }
+    @Override
+    public UserProfileScoreDTO findUserItem(int id){
+        return defaultRepository.findUserItem(id);
     }
 }

@@ -21,7 +21,7 @@ public class RootController {
         response.put("status", "running");
 
         Map<String, String> endpoints = new HashMap<>();
-        endpoints.put("profile", "/api/profile");
+        endpoints.put("profile", "/api/my");
         endpoints.put("advertisement", "/api/advertisements");
         response.put("endpoints", endpoints);
 

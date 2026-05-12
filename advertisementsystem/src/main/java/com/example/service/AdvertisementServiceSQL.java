@@ -7,6 +7,7 @@ import com.example.dto.AdvertisementUsersDTO;
 import com.example.dto.AdvertisementsDTO;
 import com.example.dto.AdvertisementsUsersDTO;
 import com.example.model.Advertisement;
+import com.example.model.ProductsCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,5 +73,9 @@ implements IAdvertisementService{
     @Override
     public AdvertisementUsersDTO findAdvertisementUsersItem(int id){
         return defaultRepository.findAdvertisementUsersItem(id);
+    }
+    @Override
+    public List<AdvertisementsDTO> findAdvertisementWithCategory (ProductsCategory category){
+        return defaultRepository.findAdvertisementWithCategory (category);
     }
 }

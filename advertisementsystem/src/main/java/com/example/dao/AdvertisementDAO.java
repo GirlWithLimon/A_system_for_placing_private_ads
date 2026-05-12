@@ -5,6 +5,7 @@ import com.example.dto.AdvertisementUsersDTO;
 import com.example.dto.AdvertisementsDTO;
 import com.example.dto.AdvertisementsUsersDTO;
 import com.example.model.Advertisement;
+import com.example.model.ProductsCategory;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
@@ -133,6 +134,55 @@ public class AdvertisementDAO extends HibernateAbstractDao<Advertisement, Intege
 
         Query<AdvertisementsUsersDTO> query = session.createQuery(hql, AdvertisementsUsersDTO.class);
         query.setParameter("idseller", idSeller);
+        return query.getResultList();
+    }
+
+    public List<AdvertisementsDTO> findAdvertisementWithCategory (ProductsCategory category){
+        logger.debug("Поиск всех объявлений с информацией о продавце (сначала проплаченные, потом нет, сортировка по рейтингу продавца и дате)");
+        Session session = getCurrentSession();
+
+        String hql = """
+        SELECT new com.example.dto.AdvertisementsDTO(
+            a.title,
+            a.category,
+            a.price,
+            u.login,
+            COALESCE(
+                (SELECT AVG(s.score) FROM Score s WHERE s.seller = u),
+                0.0
+            )
+        )
+        FROM Advertisement a
+        JOIN a.seller u
+        WHERE a.byeStatus = true
+        AND a.status = 'ACTIVE'
+        AND a.category = :category
+        ORDER BY
+             COALESCE((SELECT AVG(s.score) FROM Score s WHERE s.seller = u), 0.0) DESC,
+             a.publicationDate DESC
+        UNION ALL
+        SELECT new AdvertisementsDTO(
+            a.title,
+            a.category,
+            a.price,
+            u.login,
+            COALESCE(
+                (SELECT AVG(s.score) FROM Score s WHERE s.seller = u),
+                0.0
+            )
+        )
+        FROM Advertisement a
+        JOIN a.seller u
+        WHERE a.byeStatus = false
+        AND a.status = 'ACTIVE'
+        AND a.category = :category
+        ORDER BY
+             COALESCE((SELECT AVG(s.score) FROM Score s WHERE s.seller = u), 0.0) DESC,
+             a.publicationDate DESC
+    """;
+
+        Query<AdvertisementsDTO> query = session.createQuery(hql, AdvertisementsDTO.class);
+        query.setParameter("category", category);
         return query.getResultList();
     }
 }

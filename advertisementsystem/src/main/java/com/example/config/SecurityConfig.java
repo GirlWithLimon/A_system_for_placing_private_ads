@@ -54,12 +54,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/advertisements/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/advertisements/**").hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/api/user/advertisements/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/api/user/advertisements/{id}/byestatus/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/user/advertisements/**").hasRole("USER")
-                        .requestMatchers(HttpMethod.PATCH, "/api/user/advertisements/**").hasRole("USER")
-                        .requestMatchers(HttpMethod.DELETE, "/api/user/advertisements/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/api/my/advertisements/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/my/advertisements/{id}/byestatus/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/my/advertisements/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.PATCH, "/api/my/advertisements/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/my/advertisements/**").hasRole("USER")
 
+                        .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole("USER", "ADMIN")
 
                         .anyRequest().authenticated()
                 )
