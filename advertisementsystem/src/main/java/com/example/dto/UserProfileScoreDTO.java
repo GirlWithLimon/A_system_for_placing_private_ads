@@ -8,7 +8,7 @@ public class UserProfileScoreDTO {
     private String name;
     private String fatherName;
     private String address;
-    private Integer number;
+    private String number;
     private String seller;
     private Double score;
 
@@ -24,8 +24,8 @@ public class UserProfileScoreDTO {
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
-    public Integer getNumber() { return number; }
-    public void setNumber(Integer number) { this.number = number; }
+    public String getNumber() { return number; }
+    public void setNumber(String number) { this.number = number; }
 
     public String getSeller() { return seller; }
     public void setSeller(String seller) { this.seller = seller; }

@@ -33,7 +33,7 @@ public class SpringConfig {
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
         configurer.setLocations(
-                new ClassPathResource("advertisement.properties"),
+                new ClassPathResource("advertisementsystem.properties"),
                 new ClassPathResource("jdbc.properties")
         );
         configurer.setIgnoreUnresolvablePlaceholders(true);

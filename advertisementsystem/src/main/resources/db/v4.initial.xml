@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <include file="v4.01.insert-profiles.xml" relativeToChangelogFile="true"/>
+    <include file="v4.02.insert-users.xml" relativeToChangelogFile="true"/>
+    <include file="v4.03.insert-advertisements.xml" relativeToChangelogFile="true"/>
+    <include file="v4.04.insert-chats.xml" relativeToChangelogFile="true"/>
+    <include file="v4.05.insert-messages.xml" relativeToChangelogFile="true"/>
+    <include file="v4.06.insert-comments.xml" relativeToChangelogFile="true"/>
+    <include file="v4.07.insert-scores.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

@@ -13,7 +13,7 @@ public class RegisterUserDTO {
     private String fatherName;
     private String address;
     @NotNull(message = "Поле номер обязательно")
-    private Integer number;
+    private String number;
     @NotBlank(message = "Поле логин обязательно")
     @Size(min = 3, max = 50, message = "Логин должен быть от 3 до 50 символов")
     private String login;
@@ -36,8 +36,8 @@ public class RegisterUserDTO {
     public String getLogin() { return login; }
     public void setLogin(String login) { this.login = login; }
 
-    public Integer getNumber() { return number; }
-    public void setNumber(Integer number) { this.number = number; }
+    public String getNumber() { return number; }
+    public void setNumber(String number) { this.number = number; }
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }

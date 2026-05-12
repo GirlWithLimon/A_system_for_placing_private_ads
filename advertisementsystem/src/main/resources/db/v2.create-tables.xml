@@ -23,7 +23,7 @@
             <column name="address" type="varchar(250)">
                 <constraints nullable="true"/>
             </column>
-            <column name="number" type="int">
+            <column name="number" type="varchar(20)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

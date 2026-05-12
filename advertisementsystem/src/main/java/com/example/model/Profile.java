@@ -24,13 +24,13 @@ public class Profile implements Serializable {
     private String address;
 
     @Column(name="number", nullable = false)
-    private Integer number;
+    private String number;
 
     @OneToOne (mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private User user;
 
     public Profile(){}
-    public Profile(String secondName, String name, int number){
+    public Profile(String secondName, String name, String number){
         this.secondName = secondName;
         this.name = name;
         this.number=number;
@@ -51,8 +51,8 @@ public class Profile implements Serializable {
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
-    public int getNumber() { return number; }
-    public void setNumber(int number) { this.number = number; }
+    public String getNumber() { return number; }
+    public void setNumber(String number) { this.number = number; }
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
