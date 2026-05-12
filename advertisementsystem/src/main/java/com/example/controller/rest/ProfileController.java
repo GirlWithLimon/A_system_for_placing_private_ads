@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/my/profile")
 public class ProfileController {
-    private static final Logger logger = LoggerFactory.getLogger(AdvertisementUsersController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
     @Autowired
     private IUserService userServiceSQL;

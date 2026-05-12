@@ -57,7 +57,7 @@ public class AdvertisementUsersController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AdvertisementChangeAndPostAnswerDTO> createAdvertisement(Authentication authentication, @Valid @RequestBody NewAdvertisementDTO advertisementDTO) {
+    public ResponseEntity<AdvertisementAnswerDTO> createAdvertisement(Authentication authentication, @Valid @RequestBody NewAdvertisementDTO advertisementDTO) {
         logger.info("POST /api/my/advertisements - создание объявления: {}", advertisementDTO.getTitle());
         User seller = findUser(authentication);
         if (seller == null) {
@@ -75,21 +75,20 @@ public class AdvertisementUsersController {
         }
         advertisementServiceSQL.save(advertisement);
         logger.info("Объявление создано с ID: {}", advertisement.getId());
-        AdvertisementChangeAndPostAnswerDTO advertisementinfo = new AdvertisementChangeAndPostAnswerDTO(
-                advertisementDTO.getTitle(),
-                advertisementDTO.getCategory(),
-                advertisementDTO.getPrice(),
-                AdvertisementStatus.AСTIVE
-        );
-        if (advertisementDTO.getDescription() != null) {
-            advertisementinfo.setDescription(advertisementDTO.getDescription());
-        }
+        AdvertisementAnswerDTO result = new AdvertisementAnswerDTO( advertisement.getId(),
+                                                                    advertisement.getTitle(),
+                                                                    advertisement.getCategory(),
+                                                                    advertisement.getDescription(),
+                                                                    advertisement.getPrice(),
+                                                                    advertisement.getStatus(),
+                                                                    advertisement.getPublicationDate(),
+                                                                    advertisement.getSeller().getLogin());
 
-        return new ResponseEntity<>(advertisementinfo, HttpStatus.CREATED);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
     @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> changeAdvertisement(Authentication authentication, @PathVariable("id") int id, @RequestBody AdvertisementChangeAndPostAnswerDTO advertisementDTO) {
+    public ResponseEntity<?> changeAdvertisement(Authentication authentication, @PathVariable("id") int id, @Valid @RequestBody AdvertisementChangeDTO advertisementDTO) {
         logger.info("Patch /api/my/advertisements/id - изменение объявления с id: {}", id);
         User seller = findUser(authentication);
         if (seller == null) {
@@ -99,7 +98,7 @@ public class AdvertisementUsersController {
         if (advertisement == null) {
             throw new AdvertisementNotFoundException("Объявление с ID " + id + " не найдено");
         }
-        if (!Objects.equals(advertisementServiceSQL.find(id).getSeller().getId(), seller.getId())) {
+        if (!Objects.equals(advertisement.getSeller().getId(), seller.getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(Map.of("error", "Вы можете редактировать только свои объявления"));
         }
@@ -113,8 +112,15 @@ public class AdvertisementUsersController {
         }
         advertisementServiceSQL.update(advertisement);
         logger.info("Объявление изменено с ID: {}", advertisement.getId());
-
-        return new ResponseEntity<>(advertisement, HttpStatus.OK);
+        AdvertisementAnswerDTO result = new AdvertisementAnswerDTO( advertisement.getId(),
+                                                                    advertisement.getTitle(),
+                                                                    advertisement.getCategory(),
+                                                                    advertisement.getDescription(),
+                                                                    advertisement.getPrice(),
+                                                                    advertisement.getStatus(),
+                                                                    advertisement.getPublicationDate(),
+                                                                    advertisement.getSeller().getLogin());
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     //для проплачивания
@@ -129,13 +135,21 @@ public class AdvertisementUsersController {
         advertisement.setByeStatus(advertisementDTO.getByeStatus());
         advertisementServiceSQL.update(advertisement);
         logger.info("Объявление с ID именен статус проплачивания: {}", advertisement.getId());
-
-        return new ResponseEntity<>(advertisement, HttpStatus.OK);
+        AdvertisementAnswerDTO result = new AdvertisementAnswerDTO( advertisement.getId(),
+                                                                    advertisement.getTitle(),
+                                                                    advertisement.getCategory(),
+                                                                    advertisement.getDescription(),
+                                                                    advertisement.getPrice(),
+                                                                    advertisement.getStatus(),
+                                                                    advertisement.getPublicationDate(),
+                                                                    advertisement.getSeller().getLogin(),
+                                                                    advertisement.getByeStatus());
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteAdvertisement(Authentication authentication, @PathVariable("id") int id) {
-        logger.info("DELETE /api/user/advertisements/id - удаление объявления с id: {}", id);
+        logger.info("DELETE /api/my/advertisements/id - удаление объявления с id: {}", id);
         User seller = findUser(authentication);
         if (seller == null) {
             throw new UserNotFoundException("Пользователь с ID " + id + " не найден");

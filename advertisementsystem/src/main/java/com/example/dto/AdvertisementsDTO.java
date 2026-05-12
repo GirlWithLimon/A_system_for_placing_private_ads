@@ -18,6 +18,13 @@ public class AdvertisementsDTO {
         this.seller = seller;
         this.score = score;
     }
+    public AdvertisementsDTO( String title, String category, Double price, String seller, Double score) {
+        this.title = title;
+        this.category = category;
+        this.price = price;
+        this.seller = seller;
+        this.score = score;
+    }
 
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }

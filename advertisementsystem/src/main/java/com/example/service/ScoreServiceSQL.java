@@ -2,6 +2,7 @@ package com.example.service;
 
 
 import com.example.dao.ScoreDAO;
+import com.example.dto.ScoreDTO;
 import com.example.model.Score;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,5 +52,9 @@ implements IScoreService{
     public void delete(Integer id) {
         logger.debug("Удаление оценок с id: {}",id);
         super.delete(id);
+    }
+    @Override
+    public List<ScoreDTO> findAllScoreUsers(int iduser){
+        return defaultRepository.findAllScoreUsers(iduser);
     }
 }

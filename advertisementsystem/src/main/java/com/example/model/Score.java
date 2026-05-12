@@ -33,16 +33,25 @@ public class Score implements Serializable {
     @Column(name="date",nullable = false)
     private LocalDate date;
 
-    Score(){}
-    Score(int id,User seller, User buyer, Advertisement advertisement, int score, String comment){
+    public Score(){}
+    public Score(User seller, User buyer, Advertisement advertisement, int score, String comment){
+        this.seller = seller;
+        this.buyer = buyer;
+        this.advertisement = advertisement;
+        this.score = score;
+        this.comment = comment;
+        this.date = LocalDate.now();
+    }
+    public Score(int id,User seller, User buyer, Advertisement advertisement, int score, String comment){
         this.id = id;
         this.seller = seller;
         this.buyer = buyer;
         this.advertisement = advertisement;
-        this.comment = comment;
         this.score = score;
+        this.comment = comment;
         this.date = LocalDate.now();
     }
+
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

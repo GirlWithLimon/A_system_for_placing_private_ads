@@ -3,15 +3,15 @@ package com.example.dto;
 import com.example.model.AdvertisementStatus;
 import com.example.model.ProductsCategory;
 
-public class AdvertisementChangeAndPostAnswerDTO {
+public class AdvertisementChangeDTO {
     private String title;
     private ProductsCategory category;
     private String description;
     private Double price;
     private AdvertisementStatus status;
 
-    public AdvertisementChangeAndPostAnswerDTO(){}
-    public AdvertisementChangeAndPostAnswerDTO(String title, ProductsCategory category, Double price, AdvertisementStatus status){
+    public AdvertisementChangeDTO(){}
+    public AdvertisementChangeDTO(String title, ProductsCategory category, Double price, AdvertisementStatus status){
         this.title = title;
         this.category = category;
         this.price = price;

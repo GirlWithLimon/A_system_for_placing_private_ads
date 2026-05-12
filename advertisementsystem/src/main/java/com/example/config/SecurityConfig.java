@@ -50,18 +50,50 @@ public class SecurityConfig {
                         .requestMatchers("/api/login").permitAll()
                         .requestMatchers("/api/register").permitAll()
                         .requestMatchers("/error").permitAll()
+                        .requestMatchers("/").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/api/advertisements/**").hasAnyRole("USER", "ADMIN")
+                        // Просмотр объявлений - без авторизации
+                        .requestMatchers(HttpMethod.GET, "/api/advertisements").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/advertisements/**").permitAll()
+                        // Удаление объявления - только ADMIN
                         .requestMatchers(HttpMethod.DELETE, "/api/advertisements/**").hasRole("ADMIN")
 
+                        // Получение своих объявлений
+                        .requestMatchers(HttpMethod.GET, "/api/my/advertisements").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/my/advertisements/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/api/my/advertisements/{id}/byestatus/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/my/advertisements/**").hasRole("USER")
+                        // Создание объявления
+                        .requestMatchers(HttpMethod.POST, "/api/my/advertisements").hasRole("USER")
+                        // Изменение объявления
                         .requestMatchers(HttpMethod.PATCH, "/api/my/advertisements/**").hasRole("USER")
-                        .requestMatchers(HttpMethod.DELETE, "/api/my/advertisements/**").hasRole("USER")
+                        // Удаление объявления                        .requestMatchers(HttpMethod.DELETE, "/api/my/advertisements/**").hasAnyRole("USER", "ADMIN")
+                        // Проплата топа (byestatus) - только ADMIN
+                        .requestMatchers(HttpMethod.PATCH, "/api/my/advertisements/*/byestatus").hasRole("ADMIN")
+                        // Изменение профиля
+                        .requestMatchers(HttpMethod.GET, "/api/my/profile").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/my/profile").hasRole("USER")
 
-                        .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole("USER", "ADMIN")
+                        // Получение чатов и сообщений
+                        .requestMatchers(HttpMethod.GET, "/api/chats").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/chats/**").hasAnyRole("USER", "ADMIN")
+                        // Создание чата и сообщений
+                        .requestMatchers(HttpMethod.POST, "/api/chats").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/api/chats/**").hasRole("USER")
+                        // Изменение сообщения
+                        .requestMatchers(HttpMethod.PUT, "/api/chats/**").hasRole("USER")
+                        // Удаление чата и сообщений
+                        .requestMatchers(HttpMethod.DELETE, "/api/chats/**").hasRole("USER")
 
+                        // Просмотр пользователей и оценок - без авторизации
+                        .requestMatchers(HttpMethod.GET, "/api/users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
+                        // Создание оценки - только авторизованные
+                        .requestMatchers(HttpMethod.POST, "/api/users/*/score").hasAnyRole("USER", "ADMIN")
+                        // Изменение оценки - только владелец через проверку в контроллере
+                        .requestMatchers(HttpMethod.PUT, "/api/users/*/score/*").hasAnyRole("USER", "ADMIN")
+                        // Удаление своей оценки
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/*/score/*").hasAnyRole("USER", "ADMIN")
+                        // Удаление любой оценки (ADMIN)
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/*/score/*/admin").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

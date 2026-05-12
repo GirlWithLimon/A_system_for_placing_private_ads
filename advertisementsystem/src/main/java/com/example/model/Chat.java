@@ -21,6 +21,10 @@ public class Chat implements Serializable {
     private User buyer;
 
     public Chat(){}
+    public Chat(User seller,User buyer){
+        this.seller = seller;
+        this.buyer = buyer;
+    }
     public Chat(int id,User seller,User buyer){
         this.id=id;
         this.seller = seller;

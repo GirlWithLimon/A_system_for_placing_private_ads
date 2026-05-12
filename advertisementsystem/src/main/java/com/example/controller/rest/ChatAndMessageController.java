@@ -1,8 +1,11 @@
 package com.example.controller.rest;
 
 import com.example.dto.*;
+import com.example.exception.AdvertisementNotFoundException;
 import com.example.exception.ChatNotFoundException;
 import com.example.exception.MessageNotFoundException;
+import com.example.exception.UserNotFoundException;
+import com.example.model.Advertisement;
 import com.example.model.Chat;
 import com.example.model.Message;
 import com.example.model.User;
@@ -79,7 +82,7 @@ public class ChatAndMessageController {
         }
         if (!Objects.equals(message.getUser(), user)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Map.of("error", "Вы можете редактировать только свои объявления"));
+                    .body(Map.of("error", "Вы можете изучать только свои сообщения"));
         }
         MessageDTO messageanswer = new MessageDTO(
                 message.getId(),
@@ -89,8 +92,29 @@ public class ChatAndMessageController {
         );
         return ResponseEntity.ok(messageanswer);
     }
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> postChat(Authentication authentication, @Valid @RequestBody NewChatDTO newChat) {
+        logger.info("Post /api/chats/{id} - создание чата");
+        String currentUserLogin = authentication.getName();
+        User user = userService.findByUsername(currentUserLogin);
+        User user2 = userService.find(newChat.getUser2());
+        if (user2 == null) {
+            throw new UserNotFoundException("Пользователь с ID " + newChat.getUser2() + " не найден");
+        }
+        Chat chat = new Chat(user2,user);
+        chatService.save(chat);
+        logger.info("Сохранен чат с ID: {}", chat.getId());
+        ChatResultDTO result = new ChatResultDTO(
+                chat.getId(),
+                user2.getLogin()
+        );
+
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    }
+
     @PostMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MessageDTO> postMessageToChat(Authentication authentication, @PathVariable("id") int id, @Valid @RequestBody NewMessageDTO newMessage) {
+    public ResponseEntity<?> postMessageToChat(Authentication authentication, @PathVariable("id") int id, @Valid @RequestBody NewMessageDTO newMessage) {
         logger.info("Post /api/chats/{id} - отправка сообщения");
         String currentUserLogin = authentication.getName();
         User user = userService.findByUsername(currentUserLogin);
@@ -98,9 +122,13 @@ public class ChatAndMessageController {
         if (chat == null) {
             throw new ChatNotFoundException("Чат с ID " + id + " не найден");
         }
+        if (!(Objects.equals(chat.getBuyer(), user)||Objects.equals(chat.getSeller(), user))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Вы можете писать только в свой чат!"));
+        }
         Message message = new Message(user, chat, newMessage.getMessage());
         messageService.save(message);
-        logger.info("Объявление создано с ID: {}", message.getId());
+        logger.info("Созданное сообщение с ID: {}", message.getId());
         MessageDTO result = new MessageDTO(
                 message.getId(),
                 user.getLogin(),
@@ -109,5 +137,63 @@ public class ChatAndMessageController {
         );
 
         return new ResponseEntity<>(result, HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/{id}/{idmessage}")
+    public ResponseEntity<?> changeMessage(Authentication authentication,
+                                           @PathVariable("id") int id,
+                                           @PathVariable("idmessage") int idmessage,
+                                           @Valid @RequestBody NewMessageDTO newMessage) {
+        logger.info("Put /api/chats/id/idmessage - изменение сообщения с idmessage: {}", id);
+        String currentUserLogin = authentication.getName();
+        User user = userService.findByUsername(currentUserLogin);
+        Message message  = messageService.find(idmessage);
+        if (message == null) {
+            throw new MessageNotFoundException("Сообщение с ID " + idmessage + " не найдено");
+        }
+        if (!(Objects.equals(message.getUser(), user))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Вы можете изменять только своё сообщение!"));
+        }
+        message.setMessage(newMessage.getMessage());
+        messageService.update(message);
+        logger.info("Чат с ID: {} удален", idmessage);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/{id}/{idmessage}")
+    public ResponseEntity<?> deleteMessage(Authentication authentication, @PathVariable("idmessage") int idmessage) {
+        logger.info("DELETE /api/chats/id - удаление сообщения с id: {}", idmessage);
+        String currentUserLogin = authentication.getName();
+        User user = userService.findByUsername(currentUserLogin);
+        Message message  = messageService.find(idmessage);
+        if (message == null) {
+            throw new MessageNotFoundException("Сообщение с ID " + idmessage + " не найдено");
+        }
+        if (!(Objects.equals(message.getUser(), user))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Вы можете удалять только своё сообщение!"));
+        }
+
+        messageService.delete(idmessage);
+        logger.info("Сообщение с ID: {} удалено", idmessage);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> deleteChat(Authentication authentication, @PathVariable("id") int id) {
+        logger.info("DELETE /api/chats/id - удаление чата с id: {}", id);
+        String currentUserLogin = authentication.getName();
+        User user = userService.findByUsername(currentUserLogin);
+        Chat chat = chatService.find(id);
+        if (chat == null) {
+            throw new ChatNotFoundException("Чат с ID " + id + " не найден");
+        }
+        if (!(Objects.equals(chat.getBuyer(), user)||Objects.equals(chat.getSeller(), user))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Вы можете удалить только свой чат!"));
+        }
+        chatService.delete(id);
+        logger.info("Чат с ID: {} удален", id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

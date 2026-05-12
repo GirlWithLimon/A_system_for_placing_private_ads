@@ -232,7 +232,7 @@
     </dependencies>
 
     <build>
-        <finalName>bookstore</finalName>
+        <finalName>advertisementsystem</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
