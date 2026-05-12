@@ -3,18 +3,20 @@ package com.example.dto;
 import java.util.List;
 
 public class AdvertisementItemDTO {
-   private String title;
-   private String description;
-   private String category;
-   private Double price;
-   private String seller;
-   private Double score;
-   private List<CommentsDTO> comments;
+    private int id;
+    private String title;
+    private String description;
+    private String category;
+    private Double price;
+    private String seller;
+    private Double score;
+    private List<CommentsDTO> comments;
 
 
     AdvertisementItemDTO(){}
 
-    public AdvertisementItemDTO(String title, String description, String category, Double price, String seller, Double score) {
+    public AdvertisementItemDTO(int id, String title, String description, String category, Double price, String seller, Double score) {
+        this.id=id;
         this.title = title;
         this.description = description;
         this.category = category;
@@ -23,13 +25,17 @@ public class AdvertisementItemDTO {
         this.score = score;
     }
 
-    public AdvertisementItemDTO(String title, String category, Double price, String seller, Double score) {
+    public AdvertisementItemDTO(int id, String title, String category, Double price, String seller, Double score) {
+        this.id=id;
         this.title = title;
         this.category = category;
         this.price = price;
         this.seller = seller;
         this.score = score;
     }
+
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }

@@ -1,7 +1,7 @@
 package com.example.dao;
 
 import com.example.dto.AdvertisementItemDTO;
-import com.example.dto.AdvertisementUsersDTO;
+import com.example.dto.AdvertisementItemUsersDTO;
 import com.example.dto.AdvertisementsDTO;
 import com.example.dto.AdvertisementsUsersDTO;
 import com.example.model.Advertisement;
@@ -29,6 +29,7 @@ public class AdvertisementDAO extends HibernateAbstractDao<Advertisement, Intege
 
         String hql = """
         SELECT new com.example.dto.AdvertisementsDTO(
+            a.id,
             a.title,
             a.category,
             a.price,
@@ -47,6 +48,7 @@ public class AdvertisementDAO extends HibernateAbstractDao<Advertisement, Intege
              a.publicationDate DESC
         UNION ALL
         SELECT new AdvertisementsDTO(
+            a.id,
             a.title,
             a.category,
             a.price,
@@ -75,6 +77,7 @@ public class AdvertisementDAO extends HibernateAbstractDao<Advertisement, Intege
 
         String hql = """
         SELECT new com.example.dto.AdvertisementItemDTO(
+            a.id,
             a.title,
             a.category,
             a.description,
@@ -95,12 +98,13 @@ public class AdvertisementDAO extends HibernateAbstractDao<Advertisement, Intege
         return query.getSingleResult();
     }
 
-    public AdvertisementUsersDTO findAdvertisementUsersItem(int id) {
+    public AdvertisementItemUsersDTO findAdvertisementUsersItem(int id) {
         logger.debug("Показ объявления с id {} для продавца", id);
         Session session = getCurrentSession();
 
         String hql = """
-        SELECT new com.example.dto.AdvertisementUsersDTO(
+        SELECT new com.example.dto.AdvertisementItemUsersDTO(
+            a.id,
             a.title,
             a.category,
             a.description,
@@ -111,7 +115,7 @@ public class AdvertisementDAO extends HibernateAbstractDao<Advertisement, Intege
         WHERE a.id = :id
     """;
 
-        Query<AdvertisementUsersDTO> query = session.createQuery(hql, AdvertisementUsersDTO.class);
+        Query<AdvertisementItemUsersDTO> query = session.createQuery(hql, AdvertisementItemUsersDTO.class);
         query.setParameter("id", id);
         return query.getSingleResult();
     }
@@ -123,9 +127,9 @@ public class AdvertisementDAO extends HibernateAbstractDao<Advertisement, Intege
 
         String hql = """
         SELECT new com.example.dto.AdvertisementsUsersDTO(
+            a.id,
             a.title,
             a.category,
-            a.description,
             a.price
         )
         FROM Advertisement a
@@ -143,6 +147,7 @@ public class AdvertisementDAO extends HibernateAbstractDao<Advertisement, Intege
 
         String hql = """
         SELECT new com.example.dto.AdvertisementsDTO(
+            a.id,
             a.title,
             a.category,
             a.price,
@@ -162,6 +167,7 @@ public class AdvertisementDAO extends HibernateAbstractDao<Advertisement, Intege
              a.publicationDate DESC
         UNION ALL
         SELECT new AdvertisementsDTO(
+            a.id,
             a.title,
             a.category,
             a.price,

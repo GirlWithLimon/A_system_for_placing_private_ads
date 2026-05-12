@@ -1,15 +1,20 @@
 package com.example.dto;
 
 public class AdvertisementsUsersDTO {
+    private int id;
     private String title;
     private String category;
     private Double price;
 
-    public AdvertisementsUsersDTO(String title, String category, Double price) {
+    public AdvertisementsUsersDTO(int id, String title, String category, Double price) {
+        this.id = id;
         this.title = title;
         this.category = category;
         this.price = price;
     }
+
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }

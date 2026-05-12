@@ -35,7 +35,6 @@ public class AdvertisementController {
         return ResponseEntity.ok(advertisements);
     }
 
-
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AdvertisementItemDTO> getAdvertisementItem(@PathVariable("id") int id) {
         logger.info("GET /api/advertisements/{id} - запрос на получение объявления");
@@ -46,8 +45,8 @@ public class AdvertisementController {
         advertisement.setComments(commentsServiceSQL.findAdvertisementComments(id));
         return ResponseEntity.ok(advertisement);
     }
-    @GetMapping(value = "/{category}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<AdvertisementsDTO>> getAdvertisementWithCategory(@PathVariable("category")ProductsCategory productsCategory) {
+    @GetMapping(params = "category", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<AdvertisementsDTO>> getAdvertisementWithCategory(@RequestParam("category") ProductsCategory productsCategory) {
         logger.info("GET /api/advertisements/{category} - запрос на получение объявления по категориям");
         List<AdvertisementsDTO>  advertisement = advertisementServiceSQL.findAdvertisementWithCategory(productsCategory);
         if (advertisement == null) {

@@ -46,7 +46,7 @@ public class AdvertisementUsersController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAdvertisementItem(@PathVariable("id") int id) {
         logger.info("GET /api/my/advertisements/{id} - запрос на получение объявления пользователя");
-        AdvertisementUsersDTO advertisement = advertisementServiceSQL.findAdvertisementUsersItem(id);
+        AdvertisementItemUsersDTO advertisement = advertisementServiceSQL.findAdvertisementUsersItem(id);
         if (advertisement == null) {
             throw new AdvertisementNotFoundException("Объявление с ID " + id + " не найдено");
         }
@@ -80,7 +80,7 @@ public class AdvertisementUsersController {
     }
     @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> changeAdvertisement(Authentication authentication, @PathVariable("id") int id, @Valid @RequestBody ChangeAdvertisementDTO advertisementDTO) {
+    public ResponseEntity<?> changeAdvertisement(Authentication authentication, @PathVariable("id") int id, @RequestBody ChangeAdvertisementDTO advertisementDTO) {
         logger.info("Patch /api/my/advertisements/id - изменение объявления с id: {}", id);
         User seller = findUser(authentication);
         if (seller == null) {

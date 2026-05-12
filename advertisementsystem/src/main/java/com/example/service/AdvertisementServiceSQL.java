@@ -3,7 +3,7 @@ package com.example.service;
 
 import com.example.dao.AdvertisementDAO;
 import com.example.dto.AdvertisementItemDTO;
-import com.example.dto.AdvertisementUsersDTO;
+import com.example.dto.AdvertisementItemUsersDTO;
 import com.example.dto.AdvertisementsDTO;
 import com.example.dto.AdvertisementsUsersDTO;
 import com.example.model.Advertisement;
@@ -71,7 +71,7 @@ implements IAdvertisementService{
         return defaultRepository.findAdvertisementItem(id);
     }
     @Override
-    public AdvertisementUsersDTO findAdvertisementUsersItem(int id){
+    public AdvertisementItemUsersDTO findAdvertisementUsersItem(int id){
         return defaultRepository.findAdvertisementUsersItem(id);
     }
     @Override

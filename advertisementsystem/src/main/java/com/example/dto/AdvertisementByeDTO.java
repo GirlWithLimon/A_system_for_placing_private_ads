@@ -1,10 +1,10 @@
 package com.example.dto;
 
 public class AdvertisementByeDTO {
-    private boolean bye;
+    private boolean byeStatus;
 
-    public void setByeStatus(boolean bye) {
-        this.bye = bye;
+    public void setByeStatus(boolean byeStatus) {
+        this.byeStatus = byeStatus;
     }
-    public boolean getByeStatus(){return  this.bye;}
+    public boolean getByeStatus(){return this.byeStatus;}
 }

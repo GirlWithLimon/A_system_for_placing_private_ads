@@ -1,10 +1,9 @@
 package com.example.dto;
 
-import com.example.model.User;
-
 import java.util.List;
 
-public class AdvertisementUsersDTO {
+public class AdvertisementItemUsersDTO {
+    private int id;
     private String title;
     private String category;
     private String description;
@@ -13,9 +12,10 @@ public class AdvertisementUsersDTO {
     private List<CommentsDTO> comments;
 
 
-    AdvertisementUsersDTO(){}
+    AdvertisementItemUsersDTO(){}
 
-    public AdvertisementUsersDTO(String title, String category, String description, Double price, Boolean byestatus) {
+    public AdvertisementItemUsersDTO(int id, String title, String category, String description, Double price, Boolean byestatus) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.category = category;
@@ -23,11 +23,14 @@ public class AdvertisementUsersDTO {
         this.byestatus = byestatus;
     }
 
-    public AdvertisementUsersDTO(String title, String category, Double price) {
+    public AdvertisementItemUsersDTO(String title, String category, Double price) {
         this.title = title;
         this.category = category;
         this.price = price;
     }
+
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }

@@ -33,6 +33,23 @@ public class ProfileController {
     private IUserService userServiceSQL;
     @Autowired
     private IProfileService profileService;
+
+    @GetMapping()
+    public ResponseEntity<?> getProfile(Authentication authentication) {
+        logger.info("GET /api/my/profile - изменение профиля");
+        String currentUserLogin = authentication.getName();
+        User seller = userServiceSQL.findByUsername(currentUserLogin);
+        if (seller == null) {
+            throw new UserNotFoundException("Пользователь не найден");
+        }
+        Profile profile = profileService.find(seller.getProfile().getId());
+        if (profile == null) {
+            throw new ProfileNotFoundException("Профиль не найден");
+        }
+        logger.info("Профиль с ID: {}", profile.getId());
+
+        return new ResponseEntity<>(profile, HttpStatus.OK);
+    }
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeProfile(Authentication authentication, @Valid @RequestBody ProfileDTO profileDTO) {
@@ -40,11 +57,11 @@ public class ProfileController {
         String currentUserLogin = authentication.getName();
         User seller = userServiceSQL.findByUsername(currentUserLogin);
         if (seller == null) {
-            throw new UserNotFoundException("Пользователь с не найден");
+            throw new UserNotFoundException("Пользователь не найден");
         }
         Profile profile = profileService.find(seller.getProfile().getId());
         if (profile == null) {
-            throw new ProfileNotFoundException("Профиль с не найден");
+            throw new ProfileNotFoundException("Профиль не найден");
         }
 
         profile.setSecondName(profileDTO.getSecondName());
@@ -58,7 +75,7 @@ public class ProfileController {
         profile.setNumber(profileDTO.getNumber());
 
         profileService.update(profile);
-        logger.info("Объявление изменено с ID: {}", profile.getId());
+        logger.info("Изменен профиль с ID: {}", profile.getId());
 
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }

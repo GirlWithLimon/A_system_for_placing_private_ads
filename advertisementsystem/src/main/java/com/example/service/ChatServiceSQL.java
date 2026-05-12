@@ -2,7 +2,9 @@ package com.example.service;
 
 
 import com.example.dao.ChatDAO;
+import com.example.dto.ChatDTO;
 import com.example.model.Chat;
+import com.example.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +53,9 @@ implements IChatService{
     public void delete(Integer id) {
         logger.debug("Удаление чата с id: {}",id);
         super.delete(id);
+    }
+    @Override
+    public List<ChatDTO> findUsersChats(User user){
+        return defaultRepository.findUsersChats(user);
     }
 }
