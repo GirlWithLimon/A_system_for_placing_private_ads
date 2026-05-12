@@ -2,6 +2,8 @@ package com.example.service;
 
 
 import com.example.dao.MessageDAO;
+import com.example.dto.MessageDTO;
+import com.example.model.Chat;
 import com.example.model.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,5 +53,9 @@ implements IMessageService{
     public void delete(Integer id) {
         logger.debug("Удаление сообщения с id: {}",id);
         super.delete(id);
+    }
+    @Override
+    public List<MessageDTO> findMessagesFromChat(int idchat){
+        return defaultRepository.findMessagesFromChat(idchat);
     }
 }

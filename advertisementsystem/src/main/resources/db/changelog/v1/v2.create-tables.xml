@@ -171,7 +171,7 @@
             <column name="message" type="varchar(350)">
                 <constraints nullable="false"/>
             </column>
-            <column name="date" type="date">
+            <column name="date" type="timestamp">
                 <constraints nullable="false"/>
             </column>
         </createTable>

@@ -1,12 +1,9 @@
 package com.example.controller.rest;
 
 
-import com.example.dto.ChangeAdvertisementDTO;
 import com.example.dto.ProfileDTO;
-import com.example.exception.AdvertisementNotFoundException;
 import com.example.exception.ProfileNotFoundException;
 import com.example.exception.UserNotFoundException;
-import com.example.model.Advertisement;
 import com.example.model.Profile;
 import com.example.model.User;
 import com.example.service.IProfileService;
@@ -20,9 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/my/profile")

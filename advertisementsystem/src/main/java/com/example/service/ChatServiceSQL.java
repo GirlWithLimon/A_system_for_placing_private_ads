@@ -3,6 +3,7 @@ package com.example.service;
 
 import com.example.dao.ChatDAO;
 import com.example.dto.ChatDTO;
+import com.example.dto.ChatItemDTO;
 import com.example.model.Chat;
 import com.example.model.User;
 import org.slf4j.Logger;
@@ -57,5 +58,9 @@ implements IChatService{
     @Override
     public List<ChatDTO> findUsersChats(User user){
         return defaultRepository.findUsersChats(user);
+    }
+    @Override
+    public ChatItemDTO findChatById(User user, int id){
+        return defaultRepository.findChatById(user,id);
     }
 }

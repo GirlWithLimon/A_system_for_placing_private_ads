@@ -4,6 +4,7 @@ import com.example.dto.*;
 import com.example.exception.AdvertisementNotFoundException;
 import com.example.exception.UserNotFoundException;
 import com.example.model.Advertisement;
+import com.example.model.AdvertisementStatus;
 import com.example.model.User;
 import com.example.service.*;
 import jakarta.validation.Valid;
@@ -56,7 +57,7 @@ public class AdvertisementUsersController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createAdvertisement(Authentication authentication, @Valid @RequestBody NewAdvertisementDTO advertisementDTO) {
+    public ResponseEntity<AdvertisementChangeAndPostAnswerDTO> createAdvertisement(Authentication authentication, @Valid @RequestBody NewAdvertisementDTO advertisementDTO) {
         logger.info("POST /api/my/advertisements - создание объявления: {}", advertisementDTO.getTitle());
         User seller = findUser(authentication);
         if (seller == null) {
@@ -72,15 +73,23 @@ public class AdvertisementUsersController {
         if (advertisementDTO.getDescription() != null) {
             advertisement.setDescription(advertisementDTO.getDescription());
         }
-
         advertisementServiceSQL.save(advertisement);
         logger.info("Объявление создано с ID: {}", advertisement.getId());
+        AdvertisementChangeAndPostAnswerDTO advertisementinfo = new AdvertisementChangeAndPostAnswerDTO(
+                advertisementDTO.getTitle(),
+                advertisementDTO.getCategory(),
+                advertisementDTO.getPrice(),
+                AdvertisementStatus.AСTIVE
+        );
+        if (advertisementDTO.getDescription() != null) {
+            advertisementinfo.setDescription(advertisementDTO.getDescription());
+        }
 
-        return new ResponseEntity<>(advertisement, HttpStatus.CREATED);
+        return new ResponseEntity<>(advertisementinfo, HttpStatus.CREATED);
     }
     @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> changeAdvertisement(Authentication authentication, @PathVariable("id") int id, @RequestBody ChangeAdvertisementDTO advertisementDTO) {
+    public ResponseEntity<?> changeAdvertisement(Authentication authentication, @PathVariable("id") int id, @RequestBody AdvertisementChangeAndPostAnswerDTO advertisementDTO) {
         logger.info("Patch /api/my/advertisements/id - изменение объявления с id: {}", id);
         User seller = findUser(authentication);
         if (seller == null) {

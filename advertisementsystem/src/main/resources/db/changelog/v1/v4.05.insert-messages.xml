@@ -11,15 +11,15 @@
         <insert tableName="message">
             <column name="iduser" value="2"/>
             <column name="idchat" value="1"/>
-            <column name="message" value="Здравствуйте! А у меня есть колеса)"/>
-            <column name="date" value="2024-03-11"/>
+            <column name="message" value="Здравствуйте! Можно ли получить скидку?"/>
+            <column name="timestamp" value="2024-05-12T14:32:45"/>
         </insert>
 
         <insert tableName="message">
             <column name="iduser" value="1"/>
             <column name="idchat" value="1"/>
-            <column name="message" value="Тогда могу сделать скидку)"/>
-            <column name="date" value="2024-03-11"/>
+            <column name="message" value="Нет, цена уже указана со скидкой."/>
+            <column name="timestamp" value="2024-05-12T14:35:45"/>
         </insert>
 
         <rollback>

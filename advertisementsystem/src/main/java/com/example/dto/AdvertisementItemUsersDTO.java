@@ -22,6 +22,13 @@ public class AdvertisementItemUsersDTO {
         this.price = price;
         this.byestatus = byestatus;
     }
+    public AdvertisementItemUsersDTO(String title, String category, String description, Double price, Boolean byestatus) {
+        this.title = title;
+        this.description = description;
+        this.category = category;
+        this.price = price;
+        this.byestatus = byestatus;
+    }
 
     public AdvertisementItemUsersDTO(String title, String category, Double price) {
         this.title = title;
